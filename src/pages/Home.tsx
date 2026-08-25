@@ -122,7 +122,7 @@ export default function Home() {
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       width: '2.75rem', height: '2.75rem', borderRadius: 'var(--radius-lg)',
-                      background: `linear-gradient(135deg, ${c.gradient.includes('from-') ? '' : ''}${c.gradient})`,
+                      background: `linear-gradient(135deg, ${c.gradient.replace(',', ', ')})`,
                       color: 'white', marginBottom: 'var(--sp-3)',
                     }}>
                       <c.icon size={20} />
@@ -179,7 +179,7 @@ export default function Home() {
                       <span style={{
                         flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
                         width: '2.5rem', height: '2.5rem', borderRadius: 'var(--radius-md)',
-                        background: `linear-gradient(135deg, ${cat.gradient})`, color: 'white',
+                        background: `linear-gradient(135deg, ${cat.gradient.replace(',', ', ')})`, color: 'white',
                       }}>
                         <t.icon size={18} />
                       </span>

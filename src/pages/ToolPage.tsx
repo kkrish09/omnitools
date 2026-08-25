@@ -136,7 +136,7 @@ export default function ToolPage() {
         <span style={{
           flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: '3.5rem', height: '3.5rem', borderRadius: 'var(--radius-xl)',
-          background: `linear-gradient(135deg, ${category.gradient})`, color: 'white',
+          background: `linear-gradient(135deg, ${category.gradient.replace(',', ', ')})`, color: 'white',
         }}>
           <tool.icon size={28} />
         </span>

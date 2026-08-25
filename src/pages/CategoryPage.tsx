@@ -18,8 +18,8 @@ export default function CategoryPage() {
         <Link to="/" className="hover:text-indigo-500">Home</Link> / {category.label}
       </nav>
       <div className="mb-8 flex items-start gap-4">
-        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${category.gradient} text-white`}>
-          <category.icon className="h-7 w-7" />
+        <span style={{ display: 'flex', width: '3.5rem', height: '3.5rem', flexShrink: 0, alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--radius-xl)', background: `linear-gradient(135deg, ${category.gradient.replace(',', ', ')})`, color: 'white' }}>
+          <category.icon size={28} />
         </span>
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">{category.label}</h1>
