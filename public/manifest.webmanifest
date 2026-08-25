@@ -1,0 +1,17 @@
+{
+  "name": "OmniTools — Free Online Tools",
+  "short_name": "OmniTools",
+  "description": "31 free tools: PDF, image, text, design, developer, calculators and AI. No sign-up.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

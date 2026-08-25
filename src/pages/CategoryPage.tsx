@@ -1,0 +1,44 @@
+import { Link, useParams } from 'react-router-dom'
+import { getCategory, toolsByCategory } from '../lib/tools'
+import { useMeta } from '../lib/utils'
+import { NotFound } from './StaticPages'
+
+export default function CategoryPage() {
+  const { cat } = useParams()
+  const category = getCategory(cat ?? '')
+  useMeta(category ? `${category.label} — Free Online Tools | OmniTools` : 'Not found — OmniTools')
+  if (!category) return <NotFound />
+
+  const tools = toolsByCategory(category.id)
+
+  return (
+    <div>
+      <nav className="mb-4 text-sm text-zinc-500">
+        <Link to="/" className="hover:text-indigo-500">Home</Link> / {category.label}
+      </nav>
+      <div className="mb-8 flex items-start gap-4">
+        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${category.gradient} text-white`}>
+          <category.icon className="h-7 w-7" />
+        </span>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">{category.label}</h1>
+          <p className="mt-1 text-zinc-500 dark:text-zinc-400">{category.tagline}</p>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {tools.map((t) => (
+          <Link
+            key={t.id}
+            to={`/t/${t.id}`}
+            className="card group p-5 transition-all hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md dark:hover:border-indigo-700"
+          >
+            <t.icon className="h-7 w-7 text-indigo-500" />
+            <h2 className="mt-3 font-semibold group-hover:text-indigo-500">{t.name}</h2>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{t.blurb}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
