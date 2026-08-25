@@ -7,7 +7,7 @@ const pick = (mod: any, key: string) => ({ default: mod[key] })
 
 export const TOOL_COMPONENTS: Record<string, ToolComponent> = {
   // Code
-  'json-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'JsonFormatter'))),
+  'json-formatter': lazy(() => import('../tools/json-formatter').then((m) => pick(m, 'JsonFormatter'))),
   'yaml-json': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'YamlJson'))),
   'csv-json': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'CsvJson'))),
   'xml-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'XmlFormatter'))),
@@ -23,7 +23,7 @@ export const TOOL_COMPONENTS: Record<string, ToolComponent> = {
   'html-encode': lazy(() => import('../tools/encode-tools').then((m) => pick(m, 'HtmlEncode'))),
   // Generate
   'uuid-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'UuidGenerator'))),
-  'password-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'PasswordGenerator'))),
+  'password-generator': lazy(() => import('../tools/password-gen').then((m) => pick(m, 'PasswordGenerator'))),
   'qr-code-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'QrGenerator'))),
   'favicon-generator': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'FaviconGenerator'))),
   'gitignore-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'GitignoreGen'))),
@@ -39,7 +39,7 @@ export const TOOL_COMPONENTS: Record<string, ToolComponent> = {
   'ascii-table': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'AsciiTable'))),
   'timestamp-converter': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'TimestampConverter'))),
   // Design
-  'color-converter': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'ColorConverter'))),
+  'color-converter': lazy(() => import('../tools/color-converter').then((m) => pick(m, 'ColorConverter'))),
   'palette-generator': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'PaletteGenerator'))),
   'gradient-maker': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'GradientMaker'))),
   // Premium

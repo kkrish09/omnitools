@@ -1,0 +1,966 @@
+/*
+ * OmniTools Design System — React Aria Components
+ * Linear / Vercel / Raycast inspired developer-tool aesthetic
+ */
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  /* Gray ramp */
+  --gray-0: #ffffff;
+  --gray-1: #fafafa;
+  --gray-2: #f4f4f5;
+  --gray-3: #e4e4e7;
+  --gray-4: #d4d4d8;
+  --gray-5: #a1a1aa;
+  --gray-6: #71717a;
+  --gray-7: #52525b;
+  --gray-8: #3f3f46;
+  --gray-9: #27272a;
+  --gray-10: #18181b;
+  --gray-11: #09090b;
+
+  /* Accent — Indigo */
+  --accent-0: #eef2ff;
+  --accent-1: #e0e7ff;
+  --accent-2: #c7d2fe;
+  --accent-3: #a5b4fc;
+  --accent-4: #818cf8;
+  --accent-5: #6366f1;
+  --accent-6: #4f46e5;
+  --accent-7: #4338ca;
+  --accent-8: #3730a3;
+  --accent-9: #312e81;
+
+  /* Semantic */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Surfaces */
+  --bg: var(--gray-0);
+  --bg-raised: var(--gray-1);
+  --bg-overlay: var(--gray-0);
+  --bg-sunken: var(--gray-2);
+  --border: var(--gray-3);
+  --border-subtle: var(--gray-2);
+  --text: var(--gray-11);
+  --text-secondary: var(--gray-6);
+  --text-tertiary: var(--gray-5);
+  --ring: var(--accent-4);
+
+  /* Spacing scale (4px base) */
+  --sp-0: 0;
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.06);
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+}
+
+/* Dark mode */
+.dark {
+  --bg: var(--gray-11);
+  --bg-raised: var(--gray-10);
+  --bg-overlay: var(--gray-10);
+  --bg-sunken: var(--gray-9);
+  --border: var(--gray-8);
+  --border-subtle: var(--gray-9);
+  --text: var(--gray-1);
+  --text-secondary: var(--gray-5);
+  --text-tertiary: var(--gray-6);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.4), 0 2px 4px -2px rgba(0,0,0,.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.5), 0 4px 6px -4px rgba(0,0,0,.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,.6), 0 8px 10px -6px rgba(0,0,0,.4);
+}
+
+/* ===== GLOBAL RESETS ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* Focus ring — keyboard only */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Scrollbar */
+* { scrollbar-width: thin; scrollbar-color: var(--gray-4) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-4); border-radius: 3px; }
+
+/* Selection */
+::selection { background: var(--accent-2); color: var(--accent-9); }
+.dark ::selection { background: var(--accent-8); color: var(--accent-1); }
+
+/* ===== REACT ARIA COMPONENT STYLES ===== */
+
+/* --- Button --- */
+.react-aria-Button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+  white-space: nowrap;
+  user-select: none;
+  min-height: 36px;
+
+  /* Default: secondary */
+  background: var(--bg);
+  border-color: var(--border);
+  color: var(--text);
+}
+.react-aria-Button[data-hovered] {
+  background: var(--gray-2);
+  border-color: var(--gray-4);
+}
+.dark .react-aria-Button[data-hovered] {
+  background: var(--gray-8);
+  border-color: var(--gray-7);
+}
+.react-aria-Button[data-pressed] {
+  transform: scale(0.98);
+}
+.react-aria-Button[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.react-aria-Button[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.react-aria-Button[data-pending] {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Primary variant */
+.react-aria-Button[data-variant="primary"] {
+  background: var(--accent-6);
+  border-color: var(--accent-6);
+  color: white;
+}
+.react-aria-Button[data-variant="primary"][data-hovered] {
+  background: var(--accent-5);
+}
+.dark .react-aria-Button[data-variant="primary"][data-hovered] {
+  background: var(--accent-4);
+}
+
+/* Ghost variant */
+.react-aria-Button[data-variant="ghost"] {
+  background: transparent;
+  border-color: transparent;
+}
+.react-aria-Button[data-variant="ghost"][data-hovered] {
+  background: var(--gray-2);
+}
+.dark .react-aria-Button[data-variant="ghost"][data-hovered] {
+  background: var(--gray-8);
+}
+
+/* Danger variant */
+.react-aria-Button[data-variant="danger"] {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+/* Icon-only */
+.react-aria-Button[data-variant="icon"] {
+  padding: var(--sp-2);
+  min-width: 36px;
+}
+
+/* --- TextField / TextArea --- */
+.react-aria-TextField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  width: 100%;
+}
+.react-aria-TextField label, .react-aria-Field label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.react-aria-Input, .react-aria-TextArea {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+.react-aria-Input:focus, .react-aria-TextArea:focus {
+  border-color: var(--accent-5);
+  box-shadow: 0 0 0 3px var(--accent-1);
+}
+.dark .react-aria-Input:focus, .dark .react-aria-TextArea:focus {
+  box-shadow: 0 0 0 3px rgba(99,102,241,.2);
+}
+.react-aria-Input[data-invalid], .react-aria-TextArea[data-invalid] {
+  border-color: var(--danger);
+}
+.react-aria-TextArea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+.react-aria-FieldError {
+  font-size: var(--text-xs);
+  color: var(--danger);
+}
+
+/* --- SearchField --- */
+.react-aria-SearchField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  width: 100%;
+}
+.react-aria-SearchField .react-aria-Input {
+  padding-left: var(--sp-10);
+}
+.react-aria-SearchField Button {
+  position: absolute;
+  left: var(--sp-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  padding: var(--sp-1);
+  cursor: pointer;
+}
+
+/* --- Select --- */
+.react-aria-Select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.react-aria-SelectButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  min-height: 36px;
+  width: 100%;
+  text-align: left;
+}
+.react-aria-SelectButton[data-hovered] {
+  border-color: var(--gray-4);
+}
+.react-aria-SelectButton[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.react-aria-SelectButton[data-pressed] {
+  background: var(--gray-2);
+}
+
+/* --- Popover / ListBox --- */
+.react-aria-Popover {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-height: 300px;
+  overflow: auto;
+  min-width: 180px;
+  z-index: 50;
+}
+.react-aria-ListBox {
+  padding: var(--sp-1);
+}
+.react-aria-ListBoxItem {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  outline: none;
+}
+.react-aria-ListBoxItem[data-focused], .react-aria-ListBoxItem[data-hovered] {
+  background: var(--accent-0);
+  color: var(--accent-7);
+}
+.dark .react-aria-ListBoxItem[data-focused], .dark .react-aria-ListBoxItem[data-hovered] {
+  background: var(--accent-9);
+  color: var(--accent-2);
+}
+.react-aria-ListBoxItem[data-selected] {
+  font-weight: 600;
+}
+.react-aria-ListBoxItem[data-selected]::before {
+  content: '✓';
+  margin-right: var(--sp-2);
+  color: var(--accent-5);
+}
+
+/* --- Tabs --- */
+.react-aria-Tabs {
+  width: 100%;
+}
+.react-aria-TabList {
+  display: flex;
+  gap: var(--sp-1);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+.react-aria-Tab {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--duration-fast) var(--ease);
+}
+.react-aria-Tab[data-hovered] {
+  color: var(--text);
+}
+.react-aria-Tab[data-selected] {
+  color: var(--accent-6);
+  border-bottom-color: var(--accent-6);
+}
+.dark .react-aria-Tab[data-selected] {
+  color: var(--accent-4);
+  border-bottom-color: var(--accent-4);
+}
+.react-aria-Tab[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+.react-aria-TabPanel {
+  padding: var(--sp-4) 0;
+  animation: fadeIn var(--duration-normal) var(--ease);
+}
+
+/* --- ToggleButton / ToggleButtonGroup --- */
+.react-aria-ToggleButtonGroup {
+  display: inline-flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.react-aria-ToggleButton {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+  white-space: nowrap;
+}
+.react-aria-ToggleButton:last-child { border-right: none; }
+.react-aria-ToggleButton[data-hovered] {
+  background: var(--gray-2);
+}
+.react-aria-ToggleButton[data-pressed] {
+  background: var(--accent-0);
+  color: var(--accent-7);
+}
+.dark .react-aria-ToggleButton[data-pressed] {
+  background: var(--accent-9);
+  color: var(--accent-2);
+}
+.react-aria-ToggleButton[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+/* --- Checkbox / CheckboxGroup --- */
+.react-aria-Checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.react-aria-CheckboxBox {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease);
+  flex-shrink: 0;
+}
+.react-aria-Checkbox[data-hovered] .react-aria-CheckboxBox {
+  border-color: var(--accent-4);
+}
+.react-aria-Checkbox[data-selected] .react-aria-CheckboxBox {
+  background: var(--accent-6);
+  border-color: var(--accent-6);
+  color: white;
+}
+.react-aria-Checkbox[data-selected] .react-aria-CheckboxBox::after {
+  content: '✓';
+  font-size: 11px;
+  font-weight: 700;
+}
+.react-aria-Checkbox[data-focus-visible] .react-aria-CheckboxBox {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* --- Switch --- */
+.react-aria-Switch {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+.react-aria-SwitchTrack {
+  width: 40px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--gray-3);
+  border: none;
+  position: relative;
+  transition: background var(--duration-fast) var(--ease);
+  flex-shrink: 0;
+}
+.react-aria-Switch[data-selected] .react-aria-SwitchTrack {
+  background: var(--accent-6);
+}
+.react-aria-SwitchThumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform var(--duration-fast) var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+.react-aria-Switch[data-selected] .react-aria-SwitchThumb {
+  transform: translateX(18px);
+}
+
+/* --- Slider --- */
+.react-aria-Slider {
+  width: 100%;
+}
+.react-aria-SliderLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.react-aria-SliderTrack {
+  height: 6px;
+  background: var(--gray-3);
+  border-radius: var(--radius-full);
+  position: relative;
+}
+.react-aria-SliderFill {
+  height: 100%;
+  background: var(--accent-5);
+  border-radius: var(--radius-full);
+}
+.react-aria-SliderThumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--accent-5);
+  box-shadow: var(--shadow-md);
+  cursor: grab;
+  transition: box-shadow var(--duration-fast) var(--ease);
+}
+.react-aria-SliderThumb:active { cursor: grabbing; }
+.react-aria-SliderThumb[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.react-aria-SliderThumb[data-hovered] {
+  box-shadow: var(--shadow-lg), 0 0 0 4px var(--accent-1);
+}
+
+/* --- Meter --- */
+.react-aria-Meter {
+  width: 100%;
+}
+.react-aria-MeterLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-1);
+}
+.react-aria-MeterTrack {
+  height: 8px;
+  background: var(--gray-2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.react-aria-MeterFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--duration-slow) var(--ease);
+}
+
+/* --- ProgressBar --- */
+.react-aria-ProgressBar {
+  width: 100%;
+}
+.react-aria-ProgressBarTrack {
+  height: 6px;
+  background: var(--gray-2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.react-aria-ProgressBarFill {
+  height: 100%;
+  background: var(--accent-5);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-normal) var(--ease);
+}
+
+/* --- Dialog / Modal --- */
+.react-aria-ModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn var(--duration-normal) var(--ease);
+}
+.react-aria-Modal {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 480px;
+  width: calc(100% - var(--sp-8));
+  padding: var(--sp-8);
+  animation: slideUp var(--duration-normal) var(--ease);
+}
+.react-aria-Dialog {
+  outline: none;
+}
+.react-aria-Dialog h2, .react-aria-Dialog [slot="title"] {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--sp-2);
+}
+.react-aria-Dialog p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--sp-6);
+  line-height: 1.6;
+}
+
+/* --- Tooltip --- */
+.react-aria-Tooltip {
+  background: var(--gray-10);
+  color: var(--gray-1);
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  max-width: 250px;
+  z-index: 200;
+  animation: fadeIn var(--duration-fast) var(--ease);
+  user-select: none;
+}
+
+/* --- Toast --- */
+.react-aria-ToastRegion {
+  position: fixed;
+  bottom: var(--sp-6);
+  right: var(--sp-6);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-width: 380px;
+}
+.react-aria-Toast {
+  background: var(--gray-10);
+  color: var(--gray-1);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--text-sm);
+  animation: slideInRight var(--duration-normal) var(--ease);
+}
+.react-aria-Toast[data-hovered] {
+  background: var(--gray-9);
+}
+
+/* --- Disclosure / DisclosureGroup --- */
+.react-aria-Disclosure {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.react-aria-Disclosure + .react-aria-Disclosure {
+  margin-top: var(--sp-2);
+}
+.react-aria-DisclosureButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  background: var(--bg);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+  transition: background var(--duration-fast) var(--ease);
+}
+.react-aria-DisclosureButton[data-hovered] {
+  background: var(--gray-1);
+}
+.dark .react-aria-DisclosureButton[data-hovered] {
+  background: var(--gray-9);
+}
+.react-aria-DisclosureButton svg {
+  transition: transform var(--duration-normal) var(--ease);
+  color: var(--text-tertiary);
+}
+.react-aria-DisclosureButton[data-expanded] svg {
+  transform: rotate(90deg);
+}
+.react-aria-DisclosurePanel {
+  padding: 0 var(--sp-4) var(--sp-4);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  animation: slideDown var(--duration-normal) var(--ease);
+}
+
+/* --- Breadcrumbs --- */
+.react-aria-Breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+.react-aria-Breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.react-aria-Breadcrumb a, .react-aria-Breadcrumb [role="link"] {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+.react-aria-Breadcrumb a:hover, .react-aria-Breadcrumb [role="link"]:hover {
+  color: var(--accent-6);
+}
+.react-aria-Breadcrumb[data-current] {
+  color: var(--text);
+  font-weight: 600;
+}
+.react-aria-BreadcrumbSeparator {
+  color: var(--text-tertiary);
+  margin: 0 var(--sp-1);
+}
+
+/* --- Separator --- */
+.react-aria-Separator {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: var(--sp-4) 0;
+}
+
+/* --- NumberField --- */
+.react-aria-NumberField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.react-aria-NumberFieldGroup {
+  display: flex;
+  align-items: center;
+}
+.react-aria-NumberFieldGroup .react-aria-Input {
+  border-radius: 0;
+  flex: 1;
+}
+.react-aria-NumberFieldGroup button {
+  padding: var(--sp-2);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text);
+  cursor: pointer;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.react-aria-NumberFieldGroup button:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+.react-aria-NumberFieldGroup button:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* --- RadioGroup --- */
+.react-aria-RadioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.react-aria-Radio {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  padding: var(--sp-1) 0;
+}
+.react-aria-RadioBullet {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease);
+  flex-shrink: 0;
+}
+.react-aria-Radio[data-selected] .react-aria-RadioBullet {
+  border-color: var(--accent-6);
+}
+.react-aria-Radio[data-selected] .react-aria-RadioBullet::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-6);
+}
+.react-aria-Radio[data-focus-visible] .react-aria-RadioBullet {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* --- DropZone --- */
+.react-aria-DropZone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease);
+  cursor: pointer;
+}
+.react-aria-DropZone[data-hovered], .react-aria-DropZone[data-focus-visible] {
+  border-color: var(--accent-4);
+  background: var(--accent-0);
+}
+.dark .react-aria-DropZone[data-hovered], .dark .react-aria-DropZone[data-focus-visible] {
+  background: var(--accent-9);
+}
+
+/* --- ColorField / ColorSwatch --- */
+.react-aria-ColorField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.react-aria-ColorSwatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.react-aria-ColorSwatch[data-hovered] {
+  transform: scale(1.1);
+}
+.react-aria-ColorSwatch[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* --- Tree --- */
+.react-aria-Tree {
+  font-size: var(--text-sm);
+}
+.react-aria-TreeItem {
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.react-aria-TreeItem[data-hovered] {
+  background: var(--gray-2);
+}
+.dark .react-aria-TreeItem[data-hovered] {
+  background: var(--gray-8);
+}
+.react-aria-TreeItem[data-selected] {
+  background: var(--accent-0);
+  color: var(--accent-7);
+}
+.dark .react-aria-TreeItem[data-selected] {
+  background: var(--accent-9);
+  color: var(--accent-2);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+.card:hover {
+  border-color: var(--gray-4);
+  box-shadow: var(--shadow-md);
+}
+.dark .card:hover {
+  border-color: var(--gray-7);
+}
+.label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-1);
+}
+.code-block {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  overflow-x: auto;
+  white-space: pre;
+}

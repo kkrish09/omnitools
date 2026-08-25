@@ -1,64 +1,88 @@
-import { Suspense, useEffect, useMemo, useCallback } from 'react'
+import { Suspense, useEffect, useMemo, useCallback, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Crown, Lock, Zap, LogIn } from 'lucide-react'
+import { Button, DialogTrigger, Modal, Dialog, Meter } from 'react-aria-components'
 import { getCategory, getTool, isPremiumTool, toolsByCategory } from '../lib/tools'
 import { TOOL_COMPONENTS } from '../lib/toolComponents'
 import { useMeta } from '../lib/utils'
 import { useAuth } from '../lib/auth'
 import { useServerUsage } from '../lib/usage'
+import { BreadcrumbNav, ToastRegionWrapper } from '../components/rac'
 import AdSlot from '../components/AdSlot'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { Spinner } from '../components/ui'
 import { NotFound } from './StaticPages'
 
-const STEPS: Record<string, [string, string, string]> = {
-  code: ['Provide your input', 'The tool works locally in your browser', 'Copy or download the output'],
-  encode: ['Paste or drop your data', 'Encode or decode instantly', 'Copy the result'],
-  generate: ['Configure your options', 'Generate with one click', 'Copy or download the output'],
-  devref: ['Enter your values', 'Results update in real-time', 'Copy or save the output'],
-  design: ['Pick a starting color or style', 'Tweak until it looks perfect', 'Copy the CSS or values'],
-  premium: ['Provide your input', 'Click Generate to process', 'Copy or download the output'],
-  text: ['Paste or type your text', 'See live results as you type', 'Copy the output anywhere'],
-}
-
 function AuthRequiredGate() {
   return (
-    <div className="card mx-auto max-w-lg p-8 text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white">
-        <LogIn className="h-8 w-8" />
+    <div className="card" style={{ maxWidth: '32rem', margin: '0 auto', padding: 'var(--sp-8)', textAlign: 'center' }}>
+      <div style={{
+        width: '4rem', height: '4rem', borderRadius: 'var(--radius-xl)',
+        background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)', color: 'white',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
+      }}>
+        <LogIn size={32} />
       </div>
-      <h2 className="mt-4 text-2xl font-extrabold">Account required</h2>
-      <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+      <h2 style={{ marginTop: 'var(--sp-4)', fontSize: 'var(--text-2xl)', fontWeight: 800 }}>Account required</h2>
+      <p style={{ marginTop: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
         This is a premium tool. Create a free account to use it (1 use/day) or go Pro for unlimited access.
       </p>
-      <div className="mt-6 flex flex-col gap-3">
-        <Link to="/signup" className="btn-primary">Create free account</Link>
-        <Link to="/login" className="btn-secondary">Already have an account? Log in</Link>
+      <div style={{ marginTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 'var(--sp-3)' }}>
+        <Link to="/signup" style={{ textDecoration: 'none' }}><Button data-variant="primary" style={{ width: '100%' }}>Create free account</Button></Link>
+        <Link to="/login" style={{ textDecoration: 'none' }}><Button style={{ width: '100%' }}>Already have an account? Log in</Button></Link>
       </div>
     </div>
   )
 }
 
 function PremiumGate({ onUse, usesLeft }: { onUse: () => void; usesLeft: number }) {
+  const [showModal, setShowModal] = useState(false)
   return (
-    <div className="card mx-auto max-w-lg p-8 text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white">
-        <Lock className="h-8 w-8" />
+    <>
+      <div className="card" style={{ maxWidth: '32rem', margin: '0 auto', padding: 'var(--sp-8)', textAlign: 'center' }}>
+        <div style={{
+          width: '4rem', height: '4rem', borderRadius: 'var(--radius-xl)',
+          background: 'linear-gradient(135deg, #f59e0b, #ea580c)', color: 'white',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
+        }}>
+          <Lock size={32} />
+        </div>
+        <h2 style={{ marginTop: 'var(--sp-4)', fontSize: 'var(--text-2xl)', fontWeight: 800 }}>Premium Tool</h2>
+        <p style={{ marginTop: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+          Free accounts get <strong>1 use per day</strong>. Pro users get <strong>unlimited access</strong>.
+        </p>
+        {/* Usage meter */}
+        <div style={{ maxWidth: '16rem', margin: 'var(--sp-4) auto' }}>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 'var(--sp-1)' }}>
+              <span>Daily uses</span>
+              <span>{usesLeft} use{usesLeft !== 1 ? 's' : ''} remaining</span>
+            </div>
+            <Meter value={usesLeft > 0 ? 0 : 100} maxValue={100} />
+          </div>
+        </div>
+        <div style={{ marginTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 'var(--sp-3)' }}>
+          <Button data-variant="primary" onPress={onUse} style={{ background: '#d97706', borderColor: '#d97706', width: '100%' }}>
+            <Zap size={16} /> Use free (1/day)
+          </Button>
+          <Button data-variant="ghost" onPress={() => setShowModal(true)} style={{ width: '100%' }}>
+            <Crown size={16} /> Get Pro — unlimited
+          </Button>
+        </div>
       </div>
-      <h2 className="mt-4 text-2xl font-extrabold">Premium Tool</h2>
-      <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-        Free accounts get <strong>1 use per day</strong>. Pro users get <strong>unlimited access</strong>.
-      </p>
-      <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">Uses remaining today: {usesLeft}</p>
-      <div className="mt-6 flex flex-col gap-3">
-        <button onClick={onUse} className="btn-primary bg-amber-600 hover:bg-amber-500">
-          <Zap className="h-4 w-4" /> Use free (1/day)
-        </button>
-        <Link to="/premium" className="btn-secondary">
-          <Crown className="h-4 w-4" /> Get Pro — unlimited
-        </Link>
-      </div>
-    </div>
+      <Modal isDismissable isOpen={showModal} onOpenChange={setShowModal}>
+        <Dialog>
+          <h2 style={{ fontSize: 'var(--text-xl)', fontWeight: 700, marginBottom: 'var(--sp-2)' }}>Unlock Unlimited Access</h2>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: 'var(--sp-6)' }}>
+            Upgrade to Pro for unlimited premium tool access, 100 AI generations per day, and zero ads — just $6/month.
+          </p>
+          <div style={{ display: 'flex', gap: 'var(--sp-3)', justifyContent: 'flex-end' }}>
+            <Button slot="close" data-variant="ghost">Maybe later</Button>
+            <Link to="/premium" style={{ textDecoration: 'none' }}><Button slot="close" data-variant="primary">Get Pro</Button></Link>
+          </div>
+        </Dialog>
+      </Modal>
+    </>
   )
 }
 
@@ -75,7 +99,6 @@ export default function ToolPage() {
   const { user, loading: authLoading } = useAuth()
   const { usesLeft, isPro, loading: usageLoading, check, record } = useServerUsage('premium')
 
-  // Load usage for premium tools
   useEffect(() => {
     if (premium && user) check()
   }, [premium, user, check])
@@ -84,19 +107,16 @@ export default function ToolPage() {
   const hasAccess = !premium || (hasAccount && (isPro || (usesLeft !== null && usesLeft > 0)))
 
   const handleUse = useCallback(async () => {
-    const ok = await record()
-    // Access granted — component will render on next re-render
+    await record()
   }, [record])
 
   if (!tool || !Component) return <NotFound />
   const category = getCategory(tool.category)!
   const related = toolsByCategory(tool.category).filter((t) => t.id !== tool.id).slice(0, 4)
-  const steps = STEPS[tool.category] || STEPS.code
 
-  // Loading state
   if (premium && (authLoading || usageLoading)) {
     return (
-      <div className="card flex items-center justify-center gap-3 p-16 text-zinc-500">
+      <div className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--sp-3)', padding: 'var(--sp-16)', color: 'var(--text-secondary)' }}>
         <Spinner /> Checking access…
       </div>
     )
@@ -104,22 +124,37 @@ export default function ToolPage() {
 
   return (
     <div>
-      <nav className="mb-4 text-sm text-zinc-500">
-        <Link to="/" className="hover:text-indigo-500">Home</Link> /{' '}
-        <Link to={`/c/${category.id}`} className="hover:text-indigo-500">{category.label}</Link> /{' '}
-        <span className="text-zinc-400">{tool.name}</span>
-      </nav>
+      {/* Breadcrumbs */}
+      <BreadcrumbNav items={[
+        { label: 'Home', href: '/' },
+        { label: category.label, href: `/c/${category.id}` },
+        { label: tool.name },
+      ]} />
 
-      <div className="mb-6 flex items-start gap-4">
-        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${category.gradient} text-white`}>
-          <tool.icon className="h-7 w-7" />
+      {/* Header */}
+      <div style={{ marginTop: 'var(--sp-4)', marginBottom: 'var(--sp-6)', display: 'flex', alignItems: 'flex-start', gap: 'var(--sp-4)' }}>
+        <span style={{
+          flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '3.5rem', height: '3.5rem', borderRadius: 'var(--radius-xl)',
+          background: `linear-gradient(135deg, ${category.gradient})`, color: 'white',
+        }}>
+          <tool.icon size={28} />
         </span>
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-extrabold tracking-tight">{tool.name}</h1>
-            {premium && <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900 dark:text-amber-300"><Crown className="h-3 w-3" /> Premium</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)' }}>
+            <h1 style={{ fontSize: 'var(--text-3xl)', fontWeight: 800, letterSpacing: '-0.02em' }}>{tool.name}</h1>
+            {premium && (
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 'var(--sp-1)',
+                background: '#fef3c7', color: '#92400e',
+                padding: '2px 10px', borderRadius: 'var(--radius-full)',
+                fontSize: 'var(--text-xs)', fontWeight: 600,
+              }}>
+                <Crown size={12} /> Premium
+              </span>
+            )}
           </div>
-          <p className="mt-1 text-zinc-500 dark:text-zinc-400">{tool.blurb}</p>
+          <p style={{ marginTop: 'var(--sp-1)', color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>{tool.blurb}</p>
         </div>
       </div>
 
@@ -130,13 +165,11 @@ export default function ToolPage() {
       ) : premium && !hasAccess ? (
         <PremiumGate onUse={handleUse} usesLeft={usesLeft ?? 0} />
       ) : (
-        <Suspense
-          fallback={
-            <div className="card flex items-center justify-center gap-3 p-16 text-zinc-500">
-              <Spinner /> Loading tool…
-            </div>
-          }
-        >
+        <Suspense fallback={
+          <div className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--sp-3)', padding: 'var(--sp-16)', color: 'var(--text-secondary)' }}>
+            <Spinner /> Loading tool…
+          </div>
+        }>
           <ErrorBoundary>
             <Component />
           </ErrorBoundary>
@@ -159,26 +192,16 @@ export default function ToolPage() {
         }}
       />
 
-      <section className="mt-10 grid gap-4 sm:grid-cols-3">
-        {steps.map((s, i) => (
-          <div key={s} className="card p-5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
-              {i + 1}
-            </span>
-            <p className="mt-3 text-sm font-medium">{s}</p>
-          </div>
-        ))}
-      </section>
-
+      {/* Related tools */}
       {related.length > 0 && (
-        <section className="mt-12">
-          <h2 className="mb-4 text-xl font-bold">More {category.label.toLowerCase()}</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section style={{ marginTop: 'var(--sp-12)' }}>
+          <h2 style={{ marginBottom: 'var(--sp-4)', fontSize: 'var(--text-xl)', fontWeight: 700 }}>More {category.label.toLowerCase()}</h2>
+          <div style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
             {related.map((t) => (
-              <Link key={t.id} to={`/t/${t.id}`} className="card group p-4 transition-all hover:border-indigo-300 hover:shadow-md dark:hover:border-indigo-700">
-                <t.icon className="h-5 w-5 text-indigo-500" />
-                <span className="mt-2 block text-sm font-semibold group-hover:text-indigo-500">{t.name}</span>
-                {isPremiumTool(t.id) && <span className="mt-1 inline-block rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300">PRO</span>}
+              <Link key={t.id} to={`/t/${t.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <t.icon size={20} style={{ color: 'var(--accent-5)' }} />
+                <span style={{ marginTop: 'var(--sp-2)', display: 'block', fontWeight: 600, fontSize: 'var(--text-sm)' }}>{t.name}</span>
+                {isPremiumTool(t.id) && <span style={{ marginTop: 'var(--sp-1)', display: 'inline-block', background: '#fef3c7', color: '#92400e', padding: '1px 6px', borderRadius: 'var(--radius-full)', fontSize: '9px', fontWeight: 700 }}>PRO</span>}
               </Link>
             ))}
           </div>

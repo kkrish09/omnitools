@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/rac.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -7,37 +8,129 @@ html {
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  @apply antialiased;
 }
 
-::selection {
-  @apply bg-indigo-500/30;
+/* Shared button styles used by legacy tool components */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background: var(--accent-6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 100ms ease, opacity 100ms ease;
+}
+.btn-primary:hover {
+  background: var(--accent-7);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 100ms ease, border-color 100ms ease;
+}
+.btn-secondary:hover {
+  background: var(--gray-2);
+  border-color: var(--gray-4);
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.input,
+.input-input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-sunken);
+  color: var(--text);
+  outline: none;
+  transition: border-color 100ms ease, box-shadow 100ms ease;
+}
+.input:focus,
+.input-input:focus {
+  border-color: var(--accent-5);
+  box-shadow: 0 0 0 3px var(--accent-1);
+}
+textarea.input,
+textarea.input-input {
+  resize: vertical;
+  min-height: 8rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(120, 120, 135, 0.4) transparent;
+/* Override some Tailwind utilities with our design tokens */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+.card:hover {
+  border-color: var(--gray-4);
+  box-shadow: var(--shadow-md);
+}
+.dark .card:hover {
+  border-color: var(--gray-7);
+}
+.label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-1);
 }
 
-@layer components {
-  .card {
-    @apply rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
-  }
-  .btn,
-  .btn-primary,
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50;
-  }
-  .btn-primary {
-    @apply bg-indigo-600 text-white hover:bg-indigo-500;
-  }
-  .btn-secondary {
-    @apply border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700;
-  }
-  .input {
-    @apply w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100;
-  }
-  .label {
-    @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400;
-  }
+/* Dark mode for btn-primary/btn-secondary */
+.dark .btn-primary {
+  background: var(--accent-5);
+}
+.dark .btn-primary:hover {
+  background: var(--accent-6);
+}
+.dark .btn-secondary {
+  background: var(--gray-2);
+  border-color: var(--gray-6);
+  color: var(--text);
+}
+.dark .btn-secondary:hover {
+  background: var(--gray-3);
+  border-color: var(--gray-7);
+}
+.dark .input,
+.dark .input-input {
+  background: var(--gray-2);
+  border-color: var(--gray-6);
+  color: var(--text);
+}
+.dark .input:focus,
+.dark .input-input:focus {
+  border-color: var(--accent-4);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }

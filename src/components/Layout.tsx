@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Crown, Heart, LogOut, Menu, Moon, Search, Sun, User, Wrench, X } from 'lucide-react'
+import { Crown, Heart, LogOut, Menu, Moon, Sun, User, Wrench, X } from 'lucide-react'
+import { Toolbar, TooltipTrigger, Tooltip, Button } from 'react-aria-components'
 import { CATEGORIES, TOOLS } from '../lib/tools'
 import { SITE } from '../lib/config'
 import { useAuth } from '../lib/auth'
+import { SearchInput, ToastRegionWrapper } from './rac'
 
 const NAV = [
   { to: '/c/code', label: 'Code' },
@@ -36,180 +38,224 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4">
-          <Link to="/" className="flex items-center gap-2 font-bold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
-              <Wrench className="h-4.5 w-4.5" />
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* Header */}
+      <header style={{
+        position: 'sticky', top: 0, zIndex: 40,
+        borderBottom: '1px solid var(--border)',
+        background: dark ? 'rgba(9,9,11,.8)' : 'rgba(255,255,255,.8)',
+        backdropFilter: 'blur(12px)',
+      }}>
+        <div style={{
+          maxWidth: '72rem', margin: '0 auto', height: '4rem',
+          display: 'flex', alignItems: 'center', gap: 'var(--sp-4)',
+          padding: '0 var(--sp-4)',
+        }}>
+          {/* Logo */}
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)', fontWeight: 700, textDecoration: 'none', color: 'var(--text)' }}>
+            <span style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '2rem', height: '2rem', borderRadius: 'var(--radius-md)',
+              background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)',
+              color: 'white',
+            }}>
+              <Wrench size={18} />
             </span>
-            <span className="text-lg tracking-tight">Omni<span className="text-indigo-500">Tools</span></span>
+            <span style={{ fontSize: 'var(--text-lg)', letterSpacing: '-0.02em' }}>
+              Omni<span style={{ color: 'var(--accent-5)' }}>Tools</span>
+            </span>
           </Link>
 
-          <nav className="ml-2 hidden items-center gap-1 lg:flex">
+          {/* Nav — hidden on mobile */}
+          <Toolbar aria-label="Main navigation" style={{
+            display: 'none', gap: 'var(--sp-1)', marginLeft: 'var(--sp-2)',
+          }} className="lg:!flex">
             {NAV.map((n) => (
               <NavLink
                 key={n.to}
                 to={n.to}
-                className={({ isActive }) =>
-                  `rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400'
-                      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white'
-                  }`
-                }
+                style={({ isActive }) => ({
+                  padding: 'var(--sp-2) var(--sp-3)',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  color: isActive ? 'var(--accent-6)' : 'var(--text-secondary)',
+                  background: isActive ? (dark ? 'var(--accent-9)' : 'var(--accent-0)') : 'transparent',
+                  transition: 'all 100ms ease',
+                })}
               >
                 {n.label}
               </NavLink>
             ))}
-          </nav>
+          </Toolbar>
 
-          <form
-            className="relative ml-auto hidden w-56 md:block"
-            onSubmit={(e) => {
-              e.preventDefault()
-              navigate(`/?q=${encodeURIComponent(q)}`)
-            }}
-          >
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
+          {/* Search */}
+          <div style={{ position: 'relative', marginLeft: 'auto', width: '14rem' }} className="hidden md:block">
+            <SearchInput
               placeholder={`Search ${TOOLS.length} tools…`}
-              className="input pl-9"
+              value={q}
+              onChange={setQ}
+              onSubmit={(v) => navigate(`/?q=${encodeURIComponent(v)}`)}
+              aria-label="Search tools"
             />
-          </form>
+          </div>
 
-          <button onClick={toggleTheme} aria-label="Toggle theme" className="btn-secondary ml-auto px-2.5 md:ml-0">
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
+          {/* Theme toggle */}
+          <TooltipTrigger>
+            <Button
+              onPress={toggleTheme}
+              aria-label="Toggle theme"
+              data-variant="ghost"
+              style={{ padding: 'var(--sp-2)', minWidth: '36px' }}
+            >
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
+            </Button>
+            <Tooltip>{dark ? 'Light mode' : 'Dark mode'}</Tooltip>
+          </TooltipTrigger>
 
           {/* Auth buttons */}
           {!loading && (
             user ? (
-              <div className="hidden items-center gap-2 md:flex">
-                <span className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-300">
-                  <User className="h-4 w-4" />
+              <div style={{ display: 'none', alignItems: 'center', gap: 'var(--sp-2)' }} className="md:!flex">
+                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
+                  <User size={14} />
                   {user.email}
                 </span>
-                <button onClick={() => { logout(); navigate('/') }} className="btn-secondary px-2.5 py-1.5 text-xs">
-                  <LogOut className="h-3.5 w-3.5" />
-                </button>
+                <TooltipTrigger>
+                  <Button onPress={() => { logout(); navigate('/') }} data-variant="ghost" style={{ padding: 'var(--sp-2)' }}>
+                    <LogOut size={14} />
+                  </Button>
+                  <Tooltip>Log out</Tooltip>
+                </TooltipTrigger>
               </div>
             ) : (
-              <div className="hidden items-center gap-2 md:flex">
-                <Link to="/login" className="btn-secondary px-3 py-1.5 text-xs">Log in</Link>
-                <Link to="/signup" className="btn-primary px-3 py-1.5 text-xs">Sign up</Link>
+              <div style={{ display: 'none', gap: 'var(--sp-2)' }} className="md:!flex">
+                <Link to="/login" style={{ textDecoration: 'none' }}>
+                  <Button data-variant="ghost" style={{ padding: 'var(--sp-1) var(--sp-3)', fontSize: 'var(--text-xs)' }}>Log in</Button>
+                </Link>
+                <Link to="/signup" style={{ textDecoration: 'none' }}>
+                  <Button data-variant="primary" style={{ padding: 'var(--sp-1) var(--sp-3)', fontSize: 'var(--text-xs)' }}>Sign up</Button>
+                </Link>
               </div>
             )
           )}
 
-          <Link to="/premium" className="btn-primary hidden md:inline-flex text-xs">
-            Go Pro
+          {/* Pro badge */}
+          <Link to="/premium" style={{ textDecoration: 'none' }} className="hidden md:block">
+            <Button data-variant="primary" style={{ padding: 'var(--sp-1) var(--sp-3)', fontSize: 'var(--text-xs)', background: 'var(--accent-6)' }}>Go Pro</Button>
           </Link>
-          <button className="btn-secondary px-2.5 lg:hidden" aria-label="Menu" onClick={() => setOpen(!open)}>
-            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
+
+          {/* Mobile menu */}
+          <Button
+            onPress={() => setOpen(!open)}
+            aria-label="Menu"
+            data-variant="ghost"
+            className="lg:hidden"
+            style={{ padding: 'var(--sp-2)' }}
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </Button>
         </div>
 
+        {/* Mobile nav */}
         {open && (
-          <div className="border-t border-zinc-200 bg-white px-4 pb-4 pt-2 dark:border-zinc-800 dark:bg-zinc-950 lg:hidden">
-            <div className="grid grid-cols-2 gap-1">
-              {CATEGORIES.map((c) => (
-                <Link key={c.id} to={`/c/${c.id}`} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                  {c.label}
-                </Link>
-              ))}
-              <Link to="/premium" className="rounded-lg px-3 py-2 text-sm font-semibold text-indigo-500">
-                Go Pro →
+          <div style={{
+            borderTop: '1px solid var(--border)',
+            padding: 'var(--sp-4)',
+            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--sp-1)',
+          }}>
+            {CATEGORIES.map((c) => (
+              <Link key={c.id} to={`/c/${c.id}`} style={{
+                padding: 'var(--sp-2) var(--sp-3)',
+                borderRadius: 'var(--radius-md)',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 500,
+                textDecoration: 'none',
+                color: 'var(--text)',
+              }}>
+                {c.label}
               </Link>
-              {!loading && (
-                user ? (
-                  <button onClick={() => { logout(); navigate('/') }} className="rounded-lg px-3 py-2 text-sm font-medium text-red-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-left">
-                    Log out ({user.email})
-                  </button>
-                ) : (
-                  <>
-                    <Link to="/login" className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800">Log in</Link>
-                    <Link to="/signup" className="rounded-lg px-3 py-2 text-sm font-semibold text-indigo-500 hover:bg-zinc-100 dark:hover:bg-zinc-800">Sign up</Link>
-                  </>
-                )
-              )}
-            </div>
+            ))}
+            <Link to="/premium" style={{ padding: 'var(--sp-2) var(--sp-3)', fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--accent-5)', textDecoration: 'none' }}>
+              Go Pro →
+            </Link>
+            {!loading && (
+              user ? (
+                <button onClick={() => { logout(); navigate('/') }} style={{ padding: 'var(--sp-2) var(--sp-3)', fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--danger)', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}>
+                  Log out ({user.email})
+                </button>
+              ) : (
+                <>
+                  <Link to="/login" style={{ padding: 'var(--sp-2) var(--sp-3)', fontSize: 'var(--text-sm)', fontWeight: 500, textDecoration: 'none', color: 'var(--text)' }}>Log in</Link>
+                  <Link to="/signup" style={{ padding: 'var(--sp-2) var(--sp-3)', fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--accent-5)', textDecoration: 'none' }}>Sign up</Link>
+                </>
+              )
+            )}
           </div>
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+      {/* Main */}
+      <main style={{ maxWidth: '72rem', margin: '0 auto', width: '100%', flex: 1, padding: 'var(--sp-8) var(--sp-4)' }}>
         <Outlet />
       </main>
 
-      <footer className="border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Footer */}
+      <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg)' }}>
+        <div style={{
+          maxWidth: '72rem', margin: '0 auto',
+          display: 'grid', gap: 'var(--sp-8)', padding: 'var(--sp-12) var(--sp-4)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        }}>
           <div>
-            <div className="mb-3 flex items-center gap-2 font-bold">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
-                <Wrench className="h-4 w-4" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)', fontWeight: 700, marginBottom: 'var(--sp-3)' }}>
+              <span style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '1.75rem', height: '1.75rem', borderRadius: 'var(--radius-md)',
+                background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)', color: 'white',
+              }}>
+                <Wrench size={14} />
               </span>
               OmniTools
             </div>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">{SITE.tagline} Fast, private, no sign-up for free tools.</p>
-            <p className="mt-3 flex items-center gap-1 text-xs text-zinc-400">
-              Made with <Heart className="h-3 w-3 fill-red-500 text-red-500" /> — runs entirely in your browser.
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>{SITE.tagline} Fast, private, no sign-up for free tools.</p>
+            <p style={{ marginTop: 'var(--sp-3)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
+              Made with <Heart size={12} style={{ fill: 'var(--danger)', color: 'var(--danger)' }} /> — runs entirely in your browser.
             </p>
           </div>
           <div>
-            <h4 className="mb-3 text-sm font-semibold">Categories</h4>
-            <ul className="space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Categories</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
               {CATEGORIES.slice(0, 5).map((c) => (
-                <li key={c.id}>
-                  <Link to={`/c/${c.id}`} className="hover:text-indigo-500">{c.label}</Link>
-                </li>
+                <li key={c.id}><Link to={`/c/${c.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{c.label}</Link></li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="mb-3 text-sm font-semibold">Company</h4>
-            <ul className="space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <li><Link to="/premium" className="hover:text-indigo-500">Premium</Link></li>
-              <li><Link to="/guides" className="hover:text-indigo-500">Guides</Link></li>
-              <li><Link to="/about" className="hover:text-indigo-500">About</Link></li>
-              <li><a href={`mailto:${SITE.contactEmail}`} className="hover:text-indigo-500">Contact</a></li>
+            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Company</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+              <li><Link to="/premium" style={{ textDecoration: 'none', color: 'inherit' }}>Premium</Link></li>
+              <li><Link to="/guides" style={{ textDecoration: 'none', color: 'inherit' }}>Guides</Link></li>
+              <li><Link to="/about" style={{ textDecoration: 'none', color: 'inherit' }}>About</Link></li>
+              <li><a href={`mailto:${SITE.contactEmail}`} style={{ textDecoration: 'none', color: 'inherit' }}>Contact</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="mb-3 text-sm font-semibold">Legal</h4>
-            <ul className="space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <li><Link to="/privacy" className="hover:text-indigo-500">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-indigo-500">Terms of Service</Link></li>
+            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Legal</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
+              <li><Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>Privacy Policy</Link></li>
+              <li><Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>Terms of Service</Link></li>
             </ul>
-            {SITE.newsletterEndpoint && (
-              <form
-                className="mt-4"
-                onSubmit={async (e) => {
-                  e.preventDefault()
-                  const form = e.currentTarget
-                  const email = new FormData(form).get('email')
-                  if (email) {
-                    await fetch(SITE.newsletterEndpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
-                    form.reset()
-                    alert('Subscribed! Check your inbox.')
-                  }
-                }}
-              >
-                <label className="label">Get new tools weekly</label>
-                <div className="flex gap-2">
-                  <input name="email" type="email" required placeholder="you@email.com" className="input" />
-                  <button className="btn-primary shrink-0">Join</button>
-                </div>
-              </form>
-            )}
           </div>
         </div>
-        <div className="border-t border-zinc-200 py-4 text-center text-xs text-zinc-400 dark:border-zinc-800">
+        <div style={{ borderTop: '1px solid var(--border)', padding: 'var(--sp-4)', textAlign: 'center', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
           © {new Date().getFullYear()} {SITE.name}. All rights reserved.
         </div>
       </footer>
+
+      {/* Global toast region */}
+      <ToastRegionWrapper />
     </div>
   )
 }
