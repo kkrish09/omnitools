@@ -11,6 +11,20 @@ body {
   @apply antialiased;
 }
 
+/* Ensure lucide-react SVG icons render properly */
+svg.lucide {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke-width: 2;
+}
+/* Override Tailwind preflight display:block on inline SVG icons */
+svg:not(.lucide):not([class*="react-aria"]) {
+  display: inline-block;
+}
+
 /* Shared button styles used by legacy tool components */
 .btn-primary {
   display: inline-flex;

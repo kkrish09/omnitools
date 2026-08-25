@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Crown, Heart, LogOut, Menu, Moon, Sun, User, Wrench, X } from 'lucide-react'
 import { Toolbar, TooltipTrigger, Tooltip, Button } from 'react-aria-components'
@@ -24,6 +24,23 @@ export default function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, loading, logout } = useAuth()
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  // Cmd+K / Ctrl+K keyboard shortcut
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        searchRef.current?.focus()
+        searchRef.current?.select()
+      }
+      if (e.key === 'Escape') {
+        searchRef.current?.blur()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   useEffect(() => {
     setOpen(false)
@@ -91,12 +108,13 @@ export default function Layout() {
           </Toolbar>
 
           {/* Search */}
-          <div style={{ position: 'relative', marginLeft: 'auto', width: '14rem' }} className="hidden md:block">
+          <div style={{ position: 'relative', marginLeft: 'auto', width: '16rem' }} className="hidden md:block">
             <SearchInput
-              placeholder={`Search ${TOOLS.length} tools…`}
+              placeholder={`Search ${TOOLS.length} tools...`}
               value={q}
               onChange={setQ}
               onSubmit={(v) => navigate(`/?q=${encodeURIComponent(v)}`)}
+              inputRef={searchRef}
               aria-label="Search tools"
             />
           </div>

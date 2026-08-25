@@ -112,24 +112,44 @@ export function TextField({ label, children, ...props }: TextFieldProps & { labe
 }
 
 // ===== SEARCH =====
-export function SearchInput({ placeholder, value, onChange, onSubmit, ...props }: { placeholder?: string; value?: string; onChange?: (v: string) => void; onSubmit?: (v: string) => void; [k: string]: unknown }) {
+export function SearchInput({ placeholder, value, onChange, onSubmit, inputRef, onFocus, ...props }: { placeholder?: string; value?: string; onChange?: (v: string) => void; onSubmit?: (v: string) => void; inputRef?: React.RefObject<HTMLInputElement>; onFocus?: () => void; [k: string]: unknown }) {
   return (
     <div style={{ position: 'relative' }}>
+      {/* Search icon */}
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{
+        position: 'absolute', left: 'var(--sp-3)', top: '50%', transform: 'translateY(-50%)',
+        color: 'var(--text-tertiary)', pointerEvents: 'none', flexShrink: 0,
+      }}>
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      {/* Keyboard shortcut badge */}
+      <span style={{
+        position: 'absolute', right: 'var(--sp-2)', top: '50%', transform: 'translateY(-50%)',
+        display: 'flex', alignItems: 'center', gap: '2px',
+        padding: '2px 6px', borderRadius: 'var(--radius-sm)',
+        background: 'var(--bg)', border: '1px solid var(--border)',
+        fontSize: '11px', fontFamily: 'var(--font-sans)', color: 'var(--text-tertiary)',
+        lineHeight: 1, pointerEvents: 'none',
+      }}>
+        <kbd style={{ fontFamily: 'inherit' }}>⌘K</kbd>
+      </span>
       <input
+        ref={inputRef}
         type="search"
-        placeholder={placeholder}
+        placeholder={placeholder || 'Search tools...'}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && onSubmit) onSubmit((e.target as HTMLInputElement).value) }}
         aria-label={props['aria-label'] as string}
         style={{
-          width: '100%', padding: 'var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-10)',
+          width: '100%', padding: 'var(--sp-2) var(--sp-10) var(--sp-2) var(--sp-10)',
           fontSize: 'var(--text-sm)', fontFamily: 'var(--font-sans)',
           color: 'var(--text)', background: 'var(--bg-sunken)',
           border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
           outline: 'none', transition: 'border-color 100ms ease, box-shadow 100ms ease',
         }}
-        onFocus={(e) => { e.target.style.borderColor = 'var(--accent-5)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-1)' }}
+        onFocus={(e) => { onFocus?.(); e.target.style.borderColor = 'var(--accent-5)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-1)' }}
         onBlur={(e) => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none' }}
       />
     </div>
