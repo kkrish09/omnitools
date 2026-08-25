@@ -5,12 +5,11 @@ import { CATEGORIES, TOOLS } from '../lib/tools'
 import { SITE } from '../lib/config'
 
 const NAV = [
-  { to: '/c/pdf', label: 'PDF' },
-  { to: '/c/image', label: 'Image' },
+  { to: '/c/code', label: 'Code' },
+  { to: '/c/encode', label: 'Encode' },
+  { to: '/c/generate', label: 'Generate' },
+  { to: '/c/design', label: 'Design' },
   { to: '/c/text', label: 'Text' },
-  { to: '/c/dev', label: 'Developer' },
-  { to: '/c/calc', label: 'Calculators' },
-  { to: '/c/ai', label: 'AI Tools' },
 ]
 
 export default function Layout() {

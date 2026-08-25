@@ -6,42 +6,37 @@ export type ToolComponent = LazyExoticComponent<ComponentType>
 const pick = (mod: any, key: string) => ({ default: mod[key] })
 
 export const TOOL_COMPONENTS: Record<string, ToolComponent> = {
-  // PDF
-  'merge-pdf': lazy(() => import('../tools/pdf-tools').then((m) => pick(m, 'MergePdf'))),
-  'split-pdf': lazy(() => import('../tools/pdf-tools').then((m) => pick(m, 'SplitPdf'))),
-  'images-to-pdf': lazy(() => import('../tools/pdf-tools').then((m) => pick(m, 'ImagesToPdf'))),
-  // Image
-  'image-compressor': lazy(() => import('../tools/image-tools').then((m) => pick(m, 'ImageCompressor'))),
-  'image-resizer': lazy(() => import('../tools/image-tools').then((m) => pick(m, 'ImageResizer'))),
-  'image-converter': lazy(() => import('../tools/image-tools').then((m) => pick(m, 'ImageConverter'))),
-  'base64-image': lazy(() => import('../tools/image-tools').then((m) => pick(m, 'Base64Image'))),
-  'favicon-generator': lazy(() => import('../tools/image-tools').then((m) => pick(m, 'FaviconGenerator'))),
-  // Text
-  'word-counter': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'WordCounter'))),
-  'case-converter': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'CaseConverter'))),
-  'text-diff': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'TextDiff'))),
-  'lorem-ipsum': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'LoremIpsum'))),
-  'slug-generator': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'SlugGenerator'))),
+  // Code
+  'json-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'JsonFormatter'))),
+  'yaml-json': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'YamlJson'))),
+  'csv-json': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'CsvJson'))),
+  'xml-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'XmlFormatter'))),
+  'sql-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'SqlFormatter'))),
+  'code-beautifier': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'CodeBeautifier'))),
+  'markdown-preview': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'MarkdownPreview'))),
+  'regex-tester': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'RegexTester'))),
+  'jwt-decoder': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'JwtDecoder'))),
+  'debug-log': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'DebugLog'))),
+  // Encode
+  'base64': lazy(() => import('../tools/encode-tools').then((m) => pick(m, 'Base64Tool'))),
+  'url-encode': lazy(() => import('../tools/encode-tools').then((m) => pick(m, 'UrlEncode'))),
+  'html-encode': lazy(() => import('../tools/encode-tools').then((m) => pick(m, 'HtmlEncode'))),
+  // Generate
+  'uuid-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'UuidGenerator'))),
+  'password-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'PasswordGenerator'))),
+  'qr-code-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'QrGenerator'))),
+  'favicon-generator': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'FaviconGenerator'))),
+  'gitignore-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'GitignoreGen'))),
+  'license-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'LicenseGen'))),
+  'docker-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'DockerGen'))),
+  'cron-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'CronGen'))),
+  'lorem-ipsum': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'LoremIpsum'))),
+  'slug-generator': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'SlugGenerator'))),
   // Design
   'color-converter': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'ColorConverter'))),
   'palette-generator': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'PaletteGenerator'))),
   'gradient-maker': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'GradientMaker'))),
-  // Dev
-  'json-formatter': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'JsonFormatter'))),
-  'hash-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'HashGenerator'))),
-  'uuid-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'UuidGenerator'))),
-  'password-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'PasswordGenerator'))),
-  'qr-code-generator': lazy(() => import('../tools/dev-tools').then((m) => pick(m, 'QrGenerator'))),
-  // Calculators
-  'calculator': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'Calculator'))),
-  'percentage-calculator': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'PercentageCalculator'))),
-  'loan-calculator': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'LoanCalculator'))),
-  'bmi-calculator': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'BmiCalculator'))),
-  'age-calculator': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'AgeCalculator'))),
-  'unit-converter': lazy(() => import('../tools/calc-tools').then((m) => pick(m, 'UnitConverter'))),
-  // AI
-  'ai-summarizer': lazy(() => import('../tools/ai-tools').then((m) => pick(m, 'AiSummarizer'))),
-  'ai-paraphraser': lazy(() => import('../tools/ai-tools').then((m) => pick(m, 'AiParaphraser'))),
-  'ai-title-generator': lazy(() => import('../tools/ai-tools').then((m) => pick(m, 'AiTitleGenerator'))),
-  'ai-product-description': lazy(() => import('../tools/ai-tools').then((m) => pick(m, 'AiProductDescription'))),
+  // Text
+  'case-converter': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'CaseConverter'))),
+  'text-diff': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'TextDiff'))),
 }

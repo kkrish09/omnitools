@@ -7,15 +7,15 @@ import AdSlot from '../components/AdSlot'
 const FAQS = [
   {
     q: 'Is OmniTools really free?',
-    a: 'Yes — every tool on this site is 100% free with no sign-up. The project is supported by ads and an optional Pro plan for power users.',
+    a: 'Yes — every tool is 100% free with no sign-up. The project is supported by ads and an optional Pro plan for power users. All tools are also open source under MIT.',
   },
   {
     q: 'Are my files uploaded to a server?',
-    a: 'No. All PDF, image, text and developer tools run entirely inside your browser using modern web technology. Your files never leave your device.',
+    a: 'No. Every tool runs entirely inside your browser using Canvas, Web Crypto, and other Web APIs. Your code, data and files never leave your device.',
   },
   {
-    q: 'How do the AI tools work?',
-    a: 'AI tools send your prompt to a serverless AI endpoint and return the result. Free users get 1 AI generation per day; Pro gets 200 per day.',
+    q: 'Can I self-host or contribute?',
+    a: 'Yes — the entire project is MIT-licensed on GitHub. Clone it, run npm install && npm run dev, and start hacking. PRs welcome!',
   },
   {
     q: 'Can I use OmniTools on my phone?',
@@ -28,8 +28,8 @@ export default function Home() {
   const q = params.get('q') ?? ''
   const results = q ? searchTools(q) : null
   useMeta(
-    q ? `Search: ${q} — OmniTools` : 'OmniTools — 30 Free Online Tools: PDF, Image, Text, AI & More',
-    'Every tool you need in one place: merge & split PDFs, compress images, generate QR codes, count words and use free AI writing tools. No sign-up required.',
+    q ? `Search: ${q} — OmniTools` : 'OmniTools — 28 Free Developer Tools',
+    'Everything a developer needs: JSON formatter, YAML/CSV converter, regex tester, JWT decoder, Base64 encoder and more. All client-side, zero uploads.',
   )
 
   return (
@@ -39,12 +39,12 @@ export default function Home() {
         <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-fuchsia-400/20 blur-3xl" />
         <h1 className="mx-auto max-w-2xl text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Every tool you need.<br />
-          <span className="bg-gradient-to-r from-amber-300 to-pink-300 bg-clip-text text-transparent">One free website.</span>
+          Everything a dev needs.<br />
+          <span className="bg-gradient-to-r from-amber-300 to-pink-300 bg-clip-text text-transparent">One free toolkit.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-indigo-100">
-          Merge PDFs, compress images, generate QR codes, count words, convert units and create content with AI — fast,
-          private and completely free.
+          Format JSON, test regex, decode JWTs, encode Base64, generate UUIDs and more —
+          fast, private and completely free. Nothing leaves your browser.
         </p>
         <form
           action="/"
@@ -55,7 +55,7 @@ export default function Home() {
           <input
             name="q"
             defaultValue={q}
-            placeholder="Search for a tool… e.g. merge pdf"
+            placeholder="Search for a tool… e.g. regex, yaml, jwt"
             className="w-full rounded-2xl border-0 py-3.5 pl-12 pr-4 text-zinc-900 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50"
             onChange={(e) => {
               const url = new URL(window.location.href)
@@ -66,9 +66,8 @@ export default function Home() {
           />
         </form>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-indigo-100">
-          <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-300" /> {TOOLS.length} tools</span>
-          <span className="flex items-center gap-1.5"><Shield className="h-4 w-4 text-emerald-300" /> Files never leave your device</span>
-          <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-pink-300" /> Free AI included</span>
+          <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-300" /> {TOOLS.length} tools</span>            <span className="flex items-center gap-1.5"><Shield className="h-4 w-4 text-emerald-300" /> Nothing leaves your browser</span>
+            <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-pink-300" /> Open source (MIT)</span>
         </div>
       </section>
 

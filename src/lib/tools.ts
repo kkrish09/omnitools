@@ -1,42 +1,42 @@
 import {
-  Cake,
-  Equal,
-  Calculator,
-  Code,
-  DollarSign,
-  Droplets,
+  Braces,
   FileCode,
-  FilePlus,
-  FileText,
-  Files,
-  Fingerprint,
+  FileJson,
+  Globe,
   Hash,
-  Image as ImageIcon,
   KeyRound,
-  Lightbulb,
   Link2,
+  List,
   Maximize2,
   Palette,
-  Percent,
   Pipette,
   QrCode,
-  Ruler,
-  Wand2,
-  AlignLeft,
-  Braces,
-  Dumbbell,
-  GitCompare,
-  RefreshCw,
   Scissors,
-  ShoppingBag,
-  Sparkles,
   Star,
-  Quote,
   Type,
+  Droplets,
+  Code,
+  FileText,
+  BookOpen,
+  Fingerprint,
+  Star as StarIcon,
+  FileCode2,
+  Database,
+  FileText as FileTextIcon,
+  Terminal,
+  Search,
+  Key,
+  Clock,
+  FileCode as FileCodeIcon,
+  FileDown,
+  Box,
+  FileSearch,
+  Globe as GlobeIcon,
+  Palette as PaletteIcon,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-export type CategoryId = 'pdf' | 'image' | 'text' | 'design' | 'dev' | 'calc' | 'ai'
+export type CategoryId = 'code' | 'encode' | 'generate' | 'design' | 'text'
 
 export interface Category {
   id: CategoryId
@@ -47,13 +47,11 @@ export interface Category {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: 'pdf', label: 'PDF Tools', tagline: 'Merge, split & convert PDFs right in your browser.', icon: FileText, gradient: 'from-rose-500 to-orange-500' },
-  { id: 'image', label: 'Image Tools', tagline: 'Compress, resize and convert images without uploading them anywhere.', icon: ImageIcon, gradient: 'from-sky-500 to-cyan-500' },
-  { id: 'text', label: 'Text Tools', tagline: 'Count, convert, compare and clean up any text.', icon: Type, gradient: 'from-violet-500 to-purple-500' },
-  { id: 'design', label: 'Design Tools', tagline: 'Colors, palettes and gradients for your next project.', icon: Palette, gradient: 'from-fuchsia-500 to-pink-500' },
-  { id: 'dev', label: 'Developer Tools', tagline: 'Formatters, generators and encoders for builders.', icon: Code, gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'calc', label: 'Calculators', tagline: 'Fast answers for money, health and everyday math.', icon: Calculator, gradient: 'from-amber-500 to-yellow-500' },
-  { id: 'ai', label: 'AI Tools', tagline: 'Summarize, rewrite and generate content with free AI.', icon: Sparkles, gradient: 'from-indigo-500 to-blue-500' },
+  { id: 'code', label: 'Code Tools', tagline: 'Formatters, validators, and testers for every language.', icon: Code, gradient: 'from-emerald-500 to-teal-500' },
+  { id: 'encode', label: 'Encode & Decode', tagline: 'Base64, URL, HTML encoding and JWT decoding.', icon: Key, gradient: 'from-sky-500 to-cyan-500' },
+  { id: 'generate', label: 'Generators', tagline: 'UUIDs, passwords, QR codes, gitignore, licenses and more.', icon: Terminal, gradient: 'from-violet-500 to-purple-500' },
+  { id: 'design', label: 'Design', tagline: 'Colors, palettes and gradients for frontend devs.', icon: PaletteIcon, gradient: 'from-fuchsia-500 to-pink-500' },
+  { id: 'text', label: 'Text', tagline: 'Case conversion, diff comparison and more.', icon: Type, gradient: 'from-amber-500 to-orange-500' },
 ]
 
 export interface Tool {
@@ -66,50 +64,43 @@ export interface Tool {
 }
 
 export const TOOLS: Tool[] = [
-  // ---------- PDF ----------
-  { id: 'merge-pdf', name: 'Merge PDF', blurb: 'Combine multiple PDFs into one document, in any order.', category: 'pdf', icon: Files, keywords: ['combine', 'join', 'pdf'] },
-  { id: 'split-pdf', name: 'Split PDF', blurb: 'Extract page ranges or split a PDF into separate files.', category: 'pdf', icon: Scissors, keywords: ['extract', 'pages', 'divide', 'pdf'] },
-  { id: 'images-to-pdf', name: 'Images to PDF', blurb: 'Turn JPG, PNG or WebP images into a single PDF.', category: 'pdf', icon: FilePlus, keywords: ['jpg', 'png', 'convert', 'photo', 'scan'] },
+  // ---------- Code ----------
+  { id: 'json-formatter', name: 'JSON Formatter', blurb: 'Pretty-print, validate, minify and sort JSON keys.', category: 'code', icon: Braces, keywords: ['json', 'format', 'validate', 'minify', 'prettify'] },
+  { id: 'yaml-json', name: 'YAML ↔ JSON', blurb: 'Convert between YAML and JSON instantly.', category: 'code', icon: FileCode2, keywords: ['yaml', 'json', 'convert', 'parse'] },
+  { id: 'csv-json', name: 'CSV ↔ JSON', blurb: 'Convert CSV rows to JSON objects and back.', category: 'code', icon: Database, keywords: ['csv', 'json', 'convert', 'spreadsheet'] },
+  { id: 'xml-formatter', name: 'XML Formatter', blurb: 'Pretty-print, validate and minify XML.', category: 'code', icon: FileCodeIcon, keywords: ['xml', 'format', 'prettify', 'validate'] },
+  { id: 'sql-formatter', name: 'SQL Formatter', blurb: 'Beautify and format SQL queries.', category: 'code', icon: Database, keywords: ['sql', 'format', 'beautify', 'query'] },
+  { id: 'code-beautifier', name: 'Code Beautifier', blurb: 'Format and minify CSS, JavaScript and HTML.', category: 'code', icon: FileCode, keywords: ['css', 'javascript', 'html', 'beautify', 'minify', 'format'] },
+  { id: 'markdown-preview', name: 'Markdown Preview', blurb: 'Write markdown on the left, see rendered output on the right.', category: 'code', icon: FileTextIcon, keywords: ['markdown', 'md', 'preview', 'render'] },
+  { id: 'regex-tester', name: 'Regex Tester', blurb: 'Test regular expressions with live highlighting and match info.', category: 'code', icon: Search, keywords: ['regex', 'regular expression', 'pattern', 'match'] },
+  { id: 'jwt-decoder', name: 'JWT Decoder', blurb: 'Decode JSON Web Tokens and inspect header, payload and signature.', category: 'code', icon: Key, keywords: ['jwt', 'token', 'decode', 'auth'] },
+  { id: 'debug-log', name: 'Debug Log Formatter', blurb: 'Prettify minified JSON logs and stack traces.', category: 'code', icon: FileSearch, keywords: ['debug', 'log', 'prettify', 'stack trace', 'json log'] },
 
-  // ---------- Image ----------
-  { id: 'image-compressor', name: 'Image Compressor', blurb: 'Shrink JPG/WebP file sizes with a quality slider — see savings live.', category: 'image', icon: ImageIcon, keywords: ['compress', 'optimize', 'reduce size', 'tinypng'] },
-  { id: 'image-resizer', name: 'Image Resizer', blurb: 'Resize images to exact pixel dimensions, keeping aspect ratio.', category: 'image', icon: Maximize2, keywords: ['scale', 'dimensions', 'resize'] },
-  { id: 'image-converter', name: 'Image Converter', blurb: 'Convert between PNG, JPEG and WebP instantly.', category: 'image', icon: RefreshCw, keywords: ['convert', 'webp', 'jpg', 'png'] },
-  { id: 'base64-image', name: 'Base64 Image Encoder', blurb: 'Encode images to base64 data URLs or decode them back.', category: 'image', icon: FileCode, keywords: ['base64', 'data uri', 'encode', 'decode'] },
-  { id: 'favicon-generator', name: 'Favicon Generator', blurb: 'Generate every favicon size your website needs from one image.', category: 'image', icon: Star, keywords: ['favicon', 'icon', 'website', 'ico'] },
+  // ---------- Encode ----------
+  { id: 'base64', name: 'Base64 Encoder / Decoder', blurb: 'Encode text or files to Base64 and decode back.', category: 'encode', icon: FileCode, keywords: ['base64', 'encode', 'decode', 'data uri'] },
+  { id: 'url-encode', name: 'URL Encoder / Decoder', blurb: 'Percent-encode and decode URLs and query strings.', category: 'encode', icon: GlobeIcon, keywords: ['url', 'encode', 'decode', 'percent', 'query string'] },
+  { id: 'html-encode', name: 'HTML Encoder / Decoder', blurb: 'Escape and unescape HTML special characters.', category: 'encode', icon: FileCodeIcon, keywords: ['html', 'escape', 'unescape', 'encode', 'entities'] },
 
-  // ---------- Text ----------
-  { id: 'word-counter', name: 'Word Counter', blurb: 'Live word, character and reading-time stats plus keyword density.', category: 'text', icon: AlignLeft, keywords: ['words', 'characters', 'count', 'seo'] },
-  { id: 'case-converter', name: 'Case Converter', blurb: 'UPPER, lower, Title, Sentence, camelCase, snake_case and more.', category: 'text', icon: Type, keywords: ['uppercase', 'lowercase', 'capitalize', 'camelcase'] },
-  { id: 'text-diff', name: 'Text Diff Checker', blurb: 'Compare two texts line by line and spot every change.', category: 'text', icon: GitCompare, keywords: ['compare', 'difference', 'diff'] },
-  { id: 'lorem-ipsum', name: 'Lorem Ipsum Generator', blurb: 'Placeholder text for designs, by paragraph, sentence or word.', category: 'text', icon: Quote, keywords: ['placeholder', 'dummy text', 'filler'] },
-  { id: 'slug-generator', name: 'Slug Generator', blurb: 'Turn any title into a clean, SEO-friendly URL slug.', category: 'text', icon: Link2, keywords: ['url', 'seo', 'slugify', 'permalink'] },
+  // ---------- Generate ----------
+  { id: 'uuid-generator', name: 'UUID Generator', blurb: 'Bulk-generate cryptographically secure UUIDv4 identifiers.', category: 'generate', icon: Fingerprint, keywords: ['uuid', 'guid', 'id', 'unique'] },
+  { id: 'password-generator', name: 'Password Generator', blurb: 'Strong random passwords with entropy meter — never leaves your device.', category: 'generate', icon: KeyRound, keywords: ['password', 'random', 'secure', 'strong'] },
+  { id: 'qr-code-generator', name: 'QR Code Generator', blurb: 'Create custom-colored QR codes and download as PNG.', category: 'generate', icon: QrCode, keywords: ['qr', 'barcode', 'link', 'code'] },
+  { id: 'favicon-generator', name: 'Favicon Generator', blurb: 'Generate every favicon size your website needs from one image.', category: 'generate', icon: Star, keywords: ['favicon', 'icon', 'website', 'ico', 'apple-touch-icon'] },
+  { id: 'gitignore-gen', name: '.gitignore Generator', blurb: 'Generate a .gitignore file for any project type.', category: 'generate', icon: FileDown, keywords: ['gitignore', 'git', 'ignore', 'template'] },
+  { id: 'license-gen', name: 'License Generator', blurb: 'Generate MIT, Apache 2.0, GPL and other LICENSE files.', category: 'generate', icon: BookOpen, keywords: ['license', 'mit', 'apache', 'gpl', 'open source'] },
+  { id: 'docker-gen', name: 'Docker Compose Generator', blurb: 'Generate docker-compose.yml for common services.', category: 'generate', icon: Box, keywords: ['docker', 'compose', 'yaml', 'container', 'service'] },
+  { id: 'cron-gen', name: 'Cron Expression Generator', blurb: 'Build and understand cron schedules with human-readable descriptions.', category: 'generate', icon: Clock, keywords: ['cron', 'schedule', 'timer', 'jobs'] },
+  { id: 'lorem-ipsum', name: 'Lorem Ipsum Generator', blurb: 'Placeholder text for designs, by paragraph, sentence or word.', category: 'generate', icon: FileText, keywords: ['placeholder', 'dummy text', 'filler', 'lorem'] },
+  { id: 'slug-generator', name: 'Slug Generator', blurb: 'Turn any title into a clean, URL-friendly slug.', category: 'generate', icon: Link2, keywords: ['slug', 'url', 'seo', 'permalink', 'slugify'] },
 
   // ---------- Design ----------
-  { id: 'color-converter', name: 'Color Converter', blurb: 'Convert HEX ↔ RGB ↔ HSL and browse tints & shades.', category: 'design', icon: Pipette, keywords: ['hex', 'rgb', 'hsl', 'color'] },
-  { id: 'palette-generator', name: 'Palette Generator', blurb: 'Generate beautiful color harmonies and export CSS variables.', category: 'design', icon: Palette, keywords: ['colors', 'scheme', 'harmony', 'palette'] },
-  { id: 'gradient-maker', name: 'CSS Gradient Maker', blurb: 'Design linear and radial gradients, copy ready-to-use CSS.', category: 'design', icon: Droplets, keywords: ['gradient', 'css', 'background'] },
+  { id: 'color-converter', name: 'Color Converter', blurb: 'Convert HEX ↔ RGB ↔ HSL and browse tints & shades.', category: 'design', icon: Pipette, keywords: ['hex', 'rgb', 'hsl', 'color', 'picker'] },
+  { id: 'palette-generator', name: 'Palette Generator', blurb: 'Generate beautiful color harmonies and export CSS variables.', category: 'design', icon: Palette, keywords: ['colors', 'scheme', 'harmony', 'palette', 'css variables'] },
+  { id: 'gradient-maker', name: 'CSS Gradient Maker', blurb: 'Design linear and radial gradients, copy ready-to-use CSS.', category: 'design', icon: Droplets, keywords: ['gradient', 'css', 'background', 'linear', 'radial'] },
 
-  // ---------- Developer ----------
-  { id: 'json-formatter', name: 'JSON Formatter', blurb: 'Pretty-print, validate and minify JSON with error locations.', category: 'dev', icon: Braces, keywords: ['json', 'format', 'validate', 'minify'] },
-  { id: 'hash-generator', name: 'Hash Generator', blurb: 'SHA-1/256/384/512 hashes for text or files, fully offline.', category: 'dev', icon: Hash, keywords: ['sha256', 'checksum', 'hash'] },
-  { id: 'uuid-generator', name: 'UUID Generator', blurb: 'Bulk-generate cryptographically secure UUIDv4 identifiers.', category: 'dev', icon: Fingerprint, keywords: ['uuid', 'guid', 'id'] },
-  { id: 'password-generator', name: 'Password Generator', blurb: 'Strong random passwords with entropy meter — never leaves your device.', category: 'dev', icon: KeyRound, keywords: ['password', 'random', 'secure'] },
-  { id: 'qr-code-generator', name: 'QR Code Generator', blurb: 'Create custom-colored QR codes and download as PNG.', category: 'dev', icon: QrCode, keywords: ['qr', 'barcode', 'link'] },
-
-  // ---------- Calculators ----------
-  { id: 'calculator', name: 'Calculator', blurb: 'Full Apple-style calculator with scientific mode, history tape and keyboard support.', category: 'calc', icon: Equal, keywords: ['calculator', 'math', 'arithmetic', 'scientific', 'apple'] },
-  { id: 'percentage-calculator', name: 'Percentage Calculator', blurb: 'Three percentage modes: of-value, share and % change.', category: 'calc', icon: Percent, keywords: ['percent', 'change', 'increase'] },
-  { id: 'loan-calculator', name: 'Loan / EMI Calculator', blurb: 'Monthly payments, total interest and a year-by-year schedule.', category: 'calc', icon: DollarSign, keywords: ['loan', 'emi', 'mortgage', 'interest'] },
-  { id: 'bmi-calculator', name: 'BMI Calculator', blurb: 'Body mass index in metric or imperial with healthy-range guidance.', category: 'calc', icon: Dumbbell, keywords: ['bmi', 'weight', 'health'] },
-  { id: 'age-calculator', name: 'Age Calculator', blurb: 'Exact age in years, months and days — plus next birthday countdown.', category: 'calc', icon: Cake, keywords: ['age', 'birthday', 'date'] },
-  { id: 'unit-converter', name: 'Unit Converter', blurb: 'Length, mass, temperature, data, speed, area and volume.', category: 'calc', icon: Ruler, keywords: ['convert', 'metric', 'imperial', 'units'] },
-
-  // ---------- AI ----------
-  { id: 'ai-summarizer', name: 'AI Summarizer', blurb: 'Condense articles, papers and emails into key points.', category: 'ai', icon: FileText, keywords: ['summary', 'tldr', 'ai'] },
-  { id: 'ai-paraphraser', name: 'AI Paraphraser', blurb: 'Rewrite any text in formal, casual or concise tones.', category: 'ai', icon: Wand2, keywords: ['rewrite', 'rephrase', 'quillbot', 'ai'] },
-  { id: 'ai-title-generator', name: 'AI Blog Title Generator', blurb: 'Ten clickable, SEO-friendly headlines from one topic.', category: 'ai', icon: Lightbulb, keywords: ['titles', 'headlines', 'blog', 'seo'] },
-  { id: 'ai-product-description', name: 'AI Product Description Writer', blurb: 'Persuasive e-commerce copy from a product name and features.', category: 'ai', icon: ShoppingBag, keywords: ['product', 'ecommerce', 'copywriting'] },
+  // ---------- Text ----------
+  { id: 'case-converter', name: 'Case Converter', blurb: 'UPPER, lower, Title, camelCase, snake_case, kebab-case and more.', category: 'text', icon: Type, keywords: ['uppercase', 'lowercase', 'capitalize', 'camelcase', 'snake_case', 'kebab-case'] },
+  { id: 'text-diff', name: 'Text Diff Checker', blurb: 'Compare two texts line by line and spot every change.', category: 'text', icon: Scissors, keywords: ['compare', 'difference', 'diff', 'changes'] },
 ]
 
 export function toolsByCategory(cat: CategoryId): Tool[] {
