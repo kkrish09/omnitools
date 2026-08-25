@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { getCategory, toolsByCategory } from '../lib/tools'
+import { Crown } from 'lucide-react'
+import { getCategory, toolsByCategory, isPremiumTool } from '../lib/tools'
 import { useMeta } from '../lib/utils'
 import { NotFound } from './StaticPages'
 
@@ -33,7 +34,10 @@ export default function CategoryPage() {
             to={`/t/${t.id}`}
             className="card group p-5 transition-all hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md dark:hover:border-indigo-700"
           >
-            <t.icon className="h-7 w-7 text-indigo-500" />
+            <div className="flex items-center gap-2">
+              <t.icon className="h-7 w-7 text-indigo-500" />
+              {isPremiumTool(t.id) && <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300">PRO</span>}
+            </div>
             <h2 className="mt-3 font-semibold group-hover:text-indigo-500">{t.name}</h2>
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{t.blurb}</p>
           </Link>

@@ -19,7 +19,6 @@ import {
   FileText,
   BookOpen,
   Fingerprint,
-  Star as StarIcon,
   FileCode2,
   Database,
   FileText as FileTextIcon,
@@ -33,10 +32,24 @@ import {
   FileSearch,
   Globe as GlobeIcon,
   Palette as PaletteIcon,
+  Binary,
+  Eye,
+  Server,
+  Crown,
+  Network,
+  Brackets,
+  Sparkles,
+  Layers,
+  FileCode as FileCode2Icon,
+  PenTool,
+  GitBranch,
+  Table2,
+  Workflow,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { PREMIUM_TOOL_IDS } from './config'
 
-export type CategoryId = 'code' | 'encode' | 'generate' | 'design' | 'text'
+export type CategoryId = 'code' | 'encode' | 'generate' | 'devref' | 'design' | 'premium' | 'text'
 
 export interface Category {
   id: CategoryId
@@ -47,11 +60,13 @@ export interface Category {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: 'code', label: 'Code Tools', tagline: 'Formatters, validators, and testers for every language.', icon: Code, gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'encode', label: 'Encode & Decode', tagline: 'Base64, URL, HTML encoding and JWT decoding.', icon: Key, gradient: 'from-sky-500 to-cyan-500' },
-  { id: 'generate', label: 'Generators', tagline: 'UUIDs, passwords, QR codes, gitignore, licenses and more.', icon: Terminal, gradient: 'from-violet-500 to-purple-500' },
-  { id: 'design', label: 'Design', tagline: 'Colors, palettes and gradients for frontend devs.', icon: PaletteIcon, gradient: 'from-fuchsia-500 to-pink-500' },
-  { id: 'text', label: 'Text', tagline: 'Case conversion, diff comparison and more.', icon: Type, gradient: 'from-amber-500 to-orange-500' },
+  { id: 'code', label: 'Code Tools', tagline: 'Formatters, validators, and testers.', icon: Code, gradient: 'from-emerald-500 to-teal-500' },
+  { id: 'encode', label: 'Encode & Decode', tagline: 'Base64, URL, HTML encoding and more.', icon: Key, gradient: 'from-sky-500 to-cyan-500' },
+  { id: 'generate', label: 'Generators', tagline: 'UUIDs, passwords, QR codes, configs.', icon: Terminal, gradient: 'from-violet-500 to-purple-500' },
+  { id: 'devref', label: 'Dev Reference', tagline: 'Converters, tables, and quick lookups.', icon: Binary, gradient: 'from-blue-500 to-indigo-500' },
+  { id: 'design', label: 'Design', tagline: 'Colors, palettes and gradients.', icon: PaletteIcon, gradient: 'from-fuchsia-500 to-pink-500' },
+  { id: 'premium', label: 'Premium Tools', tagline: 'Advanced tools — Pro users get unlimited.', icon: Crown, gradient: 'from-amber-500 to-orange-500' },
+  { id: 'text', label: 'Text', tagline: 'Case conversion, diff and more.', icon: Type, gradient: 'from-amber-500 to-orange-500' },
 ]
 
 export interface Tool {
@@ -61,6 +76,11 @@ export interface Tool {
   category: CategoryId
   icon: LucideIcon
   keywords: string[]
+  premium?: boolean
+}
+
+export function isPremiumTool(id: string): boolean {
+  return PREMIUM_TOOL_IDS.includes(id)
 }
 
 export const TOOLS: Tool[] = [
@@ -93,10 +113,27 @@ export const TOOLS: Tool[] = [
   { id: 'lorem-ipsum', name: 'Lorem Ipsum Generator', blurb: 'Placeholder text for designs, by paragraph, sentence or word.', category: 'generate', icon: FileText, keywords: ['placeholder', 'dummy text', 'filler', 'lorem'] },
   { id: 'slug-generator', name: 'Slug Generator', blurb: 'Turn any title into a clean, URL-friendly slug.', category: 'generate', icon: Link2, keywords: ['slug', 'url', 'seo', 'permalink', 'slugify'] },
 
+  // ---------- Dev Reference ----------
+  { id: 'binary-hex', name: 'Binary / Hex / Octal Converter', blurb: 'Convert between decimal, binary, hexadecimal and octal instantly.', category: 'devref', icon: Binary, keywords: ['binary', 'hex', 'octal', 'decimal', 'converter', 'number base'] },
+  { id: 'utf8-inspector', name: 'UTF-8 Inspector', blurb: 'Inspect Unicode codepoints, byte sequences and character properties.', category: 'devref', icon: Eye, keywords: ['utf8', 'unicode', 'codepoint', 'encoding', 'bytes'] },
+  { id: 'nginx-gen', name: 'Nginx Config Generator', blurb: 'Generate nginx server blocks, reverse proxies and SSL configs.', category: 'devref', icon: Server, keywords: ['nginx', 'config', 'reverse proxy', 'server block', 'ssl'] },
+  { id: 'ascii-table', name: 'ASCII / Unicode Table', blurb: 'Browse ASCII and Unicode character tables with codes and descriptions.', category: 'devref', icon: Table2, keywords: ['ascii', 'unicode', 'character', 'table', 'code chart'] },
+  { id: 'timestamp-converter', name: 'Timestamp Converter', blurb: 'Convert Unix timestamps to human-readable dates and back.', category: 'devref', icon: Clock, keywords: ['timestamp', 'unix', 'epoch', 'date', 'time', 'converter'] },
+
   // ---------- Design ----------
   { id: 'color-converter', name: 'Color Converter', blurb: 'Convert HEX ↔ RGB ↔ HSL and browse tints & shades.', category: 'design', icon: Pipette, keywords: ['hex', 'rgb', 'hsl', 'color', 'picker'] },
   { id: 'palette-generator', name: 'Palette Generator', blurb: 'Generate beautiful color harmonies and export CSS variables.', category: 'design', icon: Palette, keywords: ['colors', 'scheme', 'harmony', 'palette', 'css variables'] },
   { id: 'gradient-maker', name: 'CSS Gradient Maker', blurb: 'Design linear and radial gradients, copy ready-to-use CSS.', category: 'design', icon: Droplets, keywords: ['gradient', 'css', 'background', 'linear', 'radial'] },
+
+  // ---------- Premium ----------
+  { id: 'er-diagram', name: 'ER Diagram Builder', blurb: 'Generate entity-relationship diagrams from SQL or visual editor.', category: 'premium', icon: Network, keywords: ['er', 'erd', 'diagram', 'database', 'schema', 'entity relationship', 'dbdiagram'], premium: true },
+  { id: 'graphql-builder', name: 'GraphQL Schema Builder', blurb: 'Build GraphQL schemas visually with live SDL preview.', category: 'premium', icon: GitBranch, keywords: ['graphql', 'schema', ' sdl', 'types', 'queries', 'mutations'], premium: true },
+  { id: 'openapi-designer', name: 'OpenAPI Designer', blurb: 'Design REST APIs visually — exports OpenAPI 3.0 spec.', category: 'premium', icon: Layers, keywords: ['openapi', 'swagger', 'rest', 'api', 'spec', 'design'], premium: true },
+  { id: 'css-animation', name: 'CSS Animation Builder', blurb: 'Create keyframe animations visually with live preview.', category: 'premium', icon: Sparkles, keywords: ['css', 'animation', 'keyframes', 'transition', 'animate'], premium: true },
+  { id: 'api-docs-gen', name: 'API Documentation Generator', blurb: 'Generate beautiful API docs from OpenAPI specs or manual input.', category: 'premium', icon: BookOpen, keywords: ['api', 'docs', 'documentation', 'openapi', 'swagger', 'readme'], premium: true },
+  { id: 'ts-type-gen', name: 'TypeScript Type Generator', blurb: 'Generate TypeScript interfaces from JSON, GraphQL or API responses.', category: 'premium', icon: Brackets, keywords: ['typescript', 'types', 'interface', 'generate', 'json2ts', 'codegen'], premium: true },
+  { id: 'regex-visualizer', name: 'Regex Visualizer', blurb: 'See your regex as a visual flowchart — understand patterns instantly.', category: 'premium', icon: Workflow, keywords: ['regex', 'visual', 'flowchart', 'diagram', 'pattern', 'understand'], premium: true },
+  { id: 'sql-visualizer', name: 'SQL Query Visualizer', blurb: 'Visualize SQL query execution plans and table relationships.', category: 'premium', icon: GitBranch, keywords: ['sql', 'explain', 'query plan', 'visualize', 'execution', 'database'], premium: true },
 
   // ---------- Text ----------
   { id: 'case-converter', name: 'Case Converter', blurb: 'UPPER, lower, Title, camelCase, snake_case, kebab-case and more.', category: 'text', icon: Type, keywords: ['uppercase', 'lowercase', 'capitalize', 'camelcase', 'snake_case', 'kebab-case'] },

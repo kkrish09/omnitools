@@ -36,4 +36,19 @@ export const SITE = {
 export const AI_FREE_DAILY_LIMIT = 1
 
 // Daily AI generations included with Pro.
-export const AI_PRO_DAILY_LIMIT = 200
+export const AI_PRO_DAILY_LIMIT = 100
+
+// Premium tools: 1 free use/day for free users, unlimited for Pro.
+export const PREMIUM_DAILY_LIMIT = 1
+
+// IDs of tools that require Pro for unlimited use.
+export const PREMIUM_TOOL_IDS = [
+  'er-diagram',
+  'graphql-builder',
+  'openapi-designer',
+  'css-animation',
+  'api-docs-gen',
+  'ts-type-gen',
+  'regex-visualizer',
+  'sql-visualizer',
+]

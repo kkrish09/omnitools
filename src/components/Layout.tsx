@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Heart, Menu, Moon, Search, Sun, Wrench, X } from 'lucide-react'
+import { Crown, Heart, Menu, Moon, Search, Sun, Wrench, X } from 'lucide-react'
 import { CATEGORIES, TOOLS } from '../lib/tools'
 import { SITE } from '../lib/config'
 
@@ -8,7 +8,9 @@ const NAV = [
   { to: '/c/code', label: 'Code' },
   { to: '/c/encode', label: 'Encode' },
   { to: '/c/generate', label: 'Generate' },
+  { to: '/c/devref', label: 'Reference' },
   { to: '/c/design', label: 'Design' },
+  { to: '/c/premium', label: 'Premium', icon: Crown },
   { to: '/c/text', label: 'Text' },
 ]
 

@@ -32,10 +32,25 @@ export const TOOL_COMPONENTS: Record<string, ToolComponent> = {
   'cron-gen': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'CronGen'))),
   'lorem-ipsum': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'LoremIpsum'))),
   'slug-generator': lazy(() => import('../tools/generate-tools').then((m) => pick(m, 'SlugGenerator'))),
+  // Dev Reference
+  'binary-hex': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'BinaryHex'))),
+  'utf8-inspector': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'Utf8Inspector'))),
+  'nginx-gen': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'NginxGen'))),
+  'ascii-table': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'AsciiTable'))),
+  'timestamp-converter': lazy(() => import('../tools/devref-tools').then((m) => pick(m, 'TimestampConverter'))),
   // Design
   'color-converter': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'ColorConverter'))),
   'palette-generator': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'PaletteGenerator'))),
   'gradient-maker': lazy(() => import('../tools/design-tools').then((m) => pick(m, 'GradientMaker'))),
+  // Premium
+  'er-diagram': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'ErDiagram'))),
+  'graphql-builder': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'GraphqlBuilder'))),
+  'openapi-designer': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'OpenapiDesigner'))),
+  'css-animation': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'CssAnimation'))),
+  'api-docs-gen': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'ApiDocsGen'))),
+  'ts-type-gen': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'TsTypeGen'))),
+  'regex-visualizer': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'RegexVisualizer'))),
+  'sql-visualizer': lazy(() => import('../tools/premium-tools').then((m) => pick(m, 'SqlVisualizer'))),
   // Text
   'case-converter': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'CaseConverter'))),
   'text-diff': lazy(() => import('../tools/text-tools').then((m) => pick(m, 'TextDiff'))),
