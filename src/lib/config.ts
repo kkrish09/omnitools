@@ -1,9 +1,9 @@
 // Central site configuration — fill these in to switch on monetization.
 export const SITE = {
   name: 'OmniTools',
-  tagline: 'Every tool you need. Free forever.',
+  tagline: 'Every tool a developer needs. Free forever.',
   description:
-    'Merge & split PDFs, compress images, generate QR codes, count words and use free AI writing tools. No sign-up required.',
+    '41 free developer tools: JSON formatter, YAML converter, regex tester, ER diagram builder, GraphQL schema editor, TypeScript type generator and more. All client-side, zero uploads.',
   // Replace with your real domain after deploying to Cloudflare Pages.
   url: 'https://omnitoolsapp.pages.dev',
 

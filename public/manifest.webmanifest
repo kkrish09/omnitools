@@ -1,7 +1,7 @@
 {
-  "name": "OmniTools — Free Online Tools",
+  "name": "OmniTools — 41 Free Developer Tools",
   "short_name": "OmniTools",
-  "description": "31 free tools: PDF, image, text, design, developer, calculators and AI. No sign-up.",
+  "description": "41 free developer tools: JSON, YAML, regex, ER diagrams, GraphQL builder, TypeScript types and more. All client-side.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090b",

@@ -13,13 +13,12 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 }
 
 export function About() {
-  useMeta('About — OmniTools', 'Why OmniTools exists: one fast, private, free toolbox for everyday digital tasks.')
+  useMeta('About — OmniTools', 'Why OmniTools exists: one fast, private, free developer toolbox with 41 tools.')
   return (
     <Shell title="About OmniTools">
       <p>
-        OmniTools started with a simple frustration: everyday digital tasks — merging a PDF, compressing a photo,
-        making a QR code — were scattered across sketchy sites full of pop-ups, forced sign-ups and file uploads to
-        unknown servers.
+        OmniTools started with a simple frustration: developer tasks — formatting JSON, testing regex, building ER diagrams,
+        designing APIs — were scattered across expensive paid tools and sketchy free sites full of pop-ups and forced sign-ups.
       </p>
       <p>
         We built something better: <strong>{TOOLS.length} tools on one fast site</strong>, where almost everything runs
@@ -44,8 +43,8 @@ export function Privacy() {
       <p>Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
       <h2 className="pt-2 text-lg font-bold text-zinc-900 dark:text-white">Files &amp; data processing</h2>
       <p>
-        All PDF, image, text, design, developer and calculator tools process data <strong>locally in your browser</strong>.
-        Your files and inputs are never transmitted to or stored on our servers.
+        All developer tools process data <strong>locally in your browser</strong>.
+        Your code, data and inputs are never transmitted to or stored on our servers.
       </p>
       <h2 className="pt-2 text-lg font-bold text-zinc-900 dark:text-white">AI tools</h2>
       <p>
@@ -97,24 +96,24 @@ export function NotFound() {
 
 const GUIDES = [
   {
-    slug: 'compress-images-without-losing-quality',
-    title: 'How to Compress Images Without Losing Quality',
-    body: `Large images are the #1 reason websites load slowly. Start with the right format: WebP typically produces files 25–35% smaller than JPEG at the same visual quality. Use the Image Compressor tool, set quality between 0.6 and 0.8, and compare the preview against the original — most people cannot tell the difference below 0.75.\n\nFor photos, JPEG or WebP is ideal. For screenshots, logos and graphics with sharp edges or transparency, stick with PNG. Resize images to the largest size they'll actually be displayed at before compressing; there's no point shipping a 4000px-wide image into a 800px container.`,
+    slug: 'format-json-like-a-pro',
+    title: 'How to Format JSON Like a Pro',
+    body: `Messy JSON is one of the most common developer headaches — whether it's a curl response, a config file, or a log entry. Use the JSON Formatter to pretty-print with consistent indentation (2 or 4 spaces), sort keys alphabetically for easy diffing, or minify for production.\n\nPro tip: paste minified JSON from a CI/CD log output and the formatter will immediately reveal nested structure. If you see "Unexpected token" errors, the formatter will highlight exactly where the syntax breaks — usually a trailing comma or missing quote.`,
   },
   {
-    slug: 'merge-pdf-files-the-right-way',
-    title: 'Merge PDF Files the Right Way',
-    body: `Combining PDFs is useful for job applications (cover letter + CV + portfolio), expense reports (receipts), and legal bundles. Arrange documents logically before merging: newest first for statements, chronological order for reports.\n\nBecause our Merge PDF tool runs inside your browser, sensitive documents like contracts and medical records never touch a server. If a merged PDF looks wrong, check that the source files aren't password protected — unlock them first with their owner password.`,
+    slug: 'understand-regex-with-visual-flowcharts',
+    title: 'Understand Regex Patterns with Visual Flowcharts',
+    body: `Regular expressions are powerful but notoriously hard to read. The Regex Visualizer converts your pattern into a visual flowchart, showing each component — character sets, quantifiers, groups, anchors — as labeled blocks connected by arrows.\n\nStart by pasting your regex into the Regex Tester to verify it matches expected input, then switch to the Visualizer to understand why. This is especially useful when debugging patterns you inherited from a colleague or Stack Overflow. The visual breakdown reveals exactly what each part of the pattern does.`,
   },
   {
-    slug: 'write-better-prompts-for-ai-tools',
-    title: 'Write Better Prompts for AI Writing Tools',
-    body: `The quality of AI output depends almost entirely on input specificity. Instead of "summarize this", tell the tool the audience ("for a busy executive") and the format ("three bullet points"). For paraphrasing, name the tone: formal for business emails, concise for landing pages, casual for social posts.\n\nWhen generating blog titles, include the keyword you want to rank for and mention the reader's benefit. Then combine the best parts of two suggestions — AI titles are starting points, not finals. Always edit: add numbers, power words and clarity.`,
+    slug: 'design-rest-apis-with-openapi',
+    title: 'Design REST APIs with the OpenAPI Designer',
+    body: `Before writing a single line of backend code, design your API endpoints visually. The OpenAPI Designer lets you add endpoints with methods, paths, summaries and response codes, then exports a valid OpenAPI 3.0 JSON spec.\n\nStart with your core CRUD operations: GET /resources for listing, POST /resources for creating, GET /resources/:id for reading. Add response descriptions for each status code (200, 201, 404, 500). The exported spec can be imported into Swagger UI, Postman, or any OpenAPI-compatible tool for immediate testing.`,
   },
 ]
 
 export function Guides() {
-  useMeta('Guides — OmniTools', 'Practical guides: compress images, merge PDFs and write better AI prompts.')
+  useMeta('Guides — OmniTools', 'Practical guides: format JSON, understand regex, design REST APIs and more.')
   return (
     <div className="mx-auto max-w-3xl">
       <h1 className="text-3xl font-extrabold tracking-tight">Guides</h1>

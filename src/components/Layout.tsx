@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Crown, Heart, Menu, Moon, Search, Sun, Wrench, X } from 'lucide-react'
+import { Crown, Heart, LogOut, Menu, Moon, Search, Sun, User, Wrench, X } from 'lucide-react'
 import { CATEGORIES, TOOLS } from '../lib/tools'
 import { SITE } from '../lib/config'
+import { useAuth } from '../lib/auth'
 
 const NAV = [
   { to: '/c/code', label: 'Code' },
@@ -20,6 +21,7 @@ export default function Layout() {
   const [q, setQ] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
+  const { user, loading, logout } = useAuth()
 
   useEffect(() => {
     setOpen(false)
@@ -81,7 +83,28 @@ export default function Layout() {
           <button onClick={toggleTheme} aria-label="Toggle theme" className="btn-secondary ml-auto px-2.5 md:ml-0">
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <Link to="/premium" className="btn-primary hidden md:inline-flex">
+
+          {/* Auth buttons */}
+          {!loading && (
+            user ? (
+              <div className="hidden items-center gap-2 md:flex">
+                <span className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-300">
+                  <User className="h-4 w-4" />
+                  {user.email}
+                </span>
+                <button onClick={() => { logout(); navigate('/') }} className="btn-secondary px-2.5 py-1.5 text-xs">
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="hidden items-center gap-2 md:flex">
+                <Link to="/login" className="btn-secondary px-3 py-1.5 text-xs">Log in</Link>
+                <Link to="/signup" className="btn-primary px-3 py-1.5 text-xs">Sign up</Link>
+              </div>
+            )
+          )}
+
+          <Link to="/premium" className="btn-primary hidden md:inline-flex text-xs">
             Go Pro
           </Link>
           <button className="btn-secondary px-2.5 lg:hidden" aria-label="Menu" onClick={() => setOpen(!open)}>
@@ -100,6 +123,18 @@ export default function Layout() {
               <Link to="/premium" className="rounded-lg px-3 py-2 text-sm font-semibold text-indigo-500">
                 Go Pro →
               </Link>
+              {!loading && (
+                user ? (
+                  <button onClick={() => { logout(); navigate('/') }} className="rounded-lg px-3 py-2 text-sm font-medium text-red-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-left">
+                    Log out ({user.email})
+                  </button>
+                ) : (
+                  <>
+                    <Link to="/login" className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800">Log in</Link>
+                    <Link to="/signup" className="rounded-lg px-3 py-2 text-sm font-semibold text-indigo-500 hover:bg-zinc-100 dark:hover:bg-zinc-800">Sign up</Link>
+                  </>
+                )
+              )}
             </div>
           </div>
         )}
@@ -118,7 +153,7 @@ export default function Layout() {
               </span>
               OmniTools
             </div>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">{SITE.tagline} Fast, private, no sign-up.</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{SITE.tagline} Fast, private, no sign-up for free tools.</p>
             <p className="mt-3 flex items-center gap-1 text-xs text-zinc-400">
               Made with <Heart className="h-3 w-3 fill-red-500 text-red-500" /> — runs entirely in your browser.
             </p>

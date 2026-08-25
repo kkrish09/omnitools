@@ -1,11 +1,11 @@
-import { Suspense, useMemo, useCallback } from 'react'
+import { Suspense, useEffect, useMemo, useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Crown, Lock, Zap } from 'lucide-react'
+import { Crown, Lock, Zap, LogIn } from 'lucide-react'
 import { getCategory, getTool, isPremiumTool, toolsByCategory } from '../lib/tools'
 import { TOOL_COMPONENTS } from '../lib/toolComponents'
 import { useMeta } from '../lib/utils'
-import { usePremiumTool } from '../lib/usePremium'
-import { SITE, PREMIUM_DAILY_LIMIT } from '../lib/config'
+import { useAuth } from '../lib/auth'
+import { useServerUsage } from '../lib/usage'
 import AdSlot from '../components/AdSlot'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { Spinner } from '../components/ui'
@@ -17,11 +17,29 @@ const STEPS: Record<string, [string, string, string]> = {
   generate: ['Configure your options', 'Generate with one click', 'Copy or download the output'],
   devref: ['Enter your values', 'Results update in real-time', 'Copy or save the output'],
   design: ['Pick a starting color or style', 'Tweak until it looks perfect', 'Copy the CSS or values'],
-  premium: ['Provide your input', 'Advanced processing in your browser', 'Copy or download the output'],
+  premium: ['Provide your input', 'Click Generate to process', 'Copy or download the output'],
   text: ['Paste or type your text', 'See live results as you type', 'Copy the output anywhere'],
 }
 
-function PremiumGate({ toolId, onUse }: { toolId: string; onUse: () => void }) {
+function AuthRequiredGate() {
+  return (
+    <div className="card mx-auto max-w-lg p-8 text-center">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white">
+        <LogIn className="h-8 w-8" />
+      </div>
+      <h2 className="mt-4 text-2xl font-extrabold">Account required</h2>
+      <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+        This is a premium tool. Create a free account to use it (1 use/day) or go Pro for unlimited access.
+      </p>
+      <div className="mt-6 flex flex-col gap-3">
+        <Link to="/signup" className="btn-primary">Create free account</Link>
+        <Link to="/login" className="btn-secondary">Already have an account? Log in</Link>
+      </div>
+    </div>
+  )
+}
+
+function PremiumGate({ onUse, usesLeft }: { onUse: () => void; usesLeft: number }) {
   return (
     <div className="card mx-auto max-w-lg p-8 text-center">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white">
@@ -29,18 +47,17 @@ function PremiumGate({ toolId, onUse }: { toolId: string; onUse: () => void }) {
       </div>
       <h2 className="mt-4 text-2xl font-extrabold">Premium Tool</h2>
       <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-        This is a premium tool. Free users get <strong>1 use per day</strong>.
-        Pro users get <strong>unlimited access</strong> to all premium tools.
+        Free accounts get <strong>1 use per day</strong>. Pro users get <strong>unlimited access</strong>.
       </p>
+      <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">Uses remaining today: {usesLeft}</p>
       <div className="mt-6 flex flex-col gap-3">
-        <button onClick={onUse} className="btn-primary">
-          <Zap className="h-4 w-4" /> Use free once today
+        <button onClick={onUse} className="btn-primary bg-amber-600 hover:bg-amber-500">
+          <Zap className="h-4 w-4" /> Use free (1/day)
         </button>
         <Link to="/premium" className="btn-secondary">
-          <Crown className="h-4 w-4" /> Get Pro — unlimited access
+          <Crown className="h-4 w-4" /> Get Pro — unlimited
         </Link>
       </div>
-      <p className="mt-4 text-xs text-zinc-400">Free uses reset daily at midnight.</p>
     </div>
   )
 }
@@ -55,21 +72,35 @@ export default function ToolPage() {
 
   const Component = useMemo(() => (tool ? TOOL_COMPONENTS[tool.id] : undefined), [tool])
   const premium = isPremiumTool(tool?.id ?? '')
-  const { usesLeft, consume } = usePremiumTool()
+  const { user, loading: authLoading } = useAuth()
+  const { usesLeft, isPro, loading: usageLoading, check, record } = useServerUsage('premium')
 
-  // For premium tools, only show if user has uses left or is Pro
-  const hasAccess = !premium || usesLeft > 0
+  // Load usage for premium tools
+  useEffect(() => {
+    if (premium && user) check()
+  }, [premium, user, check])
 
-  const handleUse = useCallback(() => {
-    if (consume()) {
-      // Access granted — component will render
-    }
-  }, [consume])
+  const hasAccount = !!user
+  const hasAccess = !premium || (hasAccount && (isPro || (usesLeft !== null && usesLeft > 0)))
+
+  const handleUse = useCallback(async () => {
+    const ok = await record()
+    // Access granted — component will render on next re-render
+  }, [record])
 
   if (!tool || !Component) return <NotFound />
   const category = getCategory(tool.category)!
   const related = toolsByCategory(tool.category).filter((t) => t.id !== tool.id).slice(0, 4)
   const steps = STEPS[tool.category] || STEPS.code
+
+  // Loading state
+  if (premium && (authLoading || usageLoading)) {
+    return (
+      <div className="card flex items-center justify-center gap-3 p-16 text-zinc-500">
+        <Spinner /> Checking access…
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -89,16 +120,15 @@ export default function ToolPage() {
             {premium && <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900 dark:text-amber-300"><Crown className="h-3 w-3" /> Premium</span>}
           </div>
           <p className="mt-1 text-zinc-500 dark:text-zinc-400">{tool.blurb}</p>
-          {premium && !usesLeft && (
-            <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">Free uses remaining today: {usesLeft}. <Link to="/premium" className="underline">Get Pro for unlimited.</Link></p>
-          )}
         </div>
       </div>
 
       <AdSlot slot="2222222222" format="horizontal" className="mb-6 min-h-[90px]" />
 
-      {premium && !hasAccess ? (
-        <PremiumGate toolId={tool.id} onUse={handleUse} />
+      {premium && !hasAccount ? (
+        <AuthRequiredGate />
+      ) : premium && !hasAccess ? (
+        <PremiumGate onUse={handleUse} usesLeft={usesLeft ?? 0} />
       ) : (
         <Suspense
           fallback={

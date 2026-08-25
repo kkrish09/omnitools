@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import CategoryPage from './pages/CategoryPage'
 import ToolPage from './pages/ToolPage'
 import Premium from './pages/Premium'
+import { LoginPage, SignupPage } from './pages/AuthPages'
 import { About, Guides, NotFound, Privacy, Terms } from './pages/StaticPages'
 
 export default function App() {
@@ -14,6 +15,8 @@ export default function App() {
         <Route path="/c/:cat" element={<CategoryPage />} />
         <Route path="/t/:id" element={<ToolPage />} />
         <Route path="/premium" element={<Premium />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/guides" element={<Guides />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
