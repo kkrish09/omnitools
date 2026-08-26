@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Check, Crown, Rocket, X } from 'lucide-react'
+import { Check, Crown, X } from 'lucide-react'
 import { SITE, AI_PRO_DAILY_LIMIT, AI_FREE_DAILY_LIMIT, PREMIUM_DAILY_LIMIT } from '../lib/config'
 import { TOOLS } from '../lib/tools'
 import { useMeta } from '../lib/utils'
@@ -19,10 +19,10 @@ const PLANS = [
     features: [
       [`${freeCount} free tools — unlimited use`, true],
       [`${AI_FREE_DAILY_LIMIT} AI generation per day`, true],
-      [`${premiumCount} premium tools — ${PREMIUM_DAILY_LIMIT} use per day each`, true],
-      ['Ad-supported experience', true],
+      [`${premiumCount} premium tools — ${PREMIUM_DAILY_LIMIT} use/day each`, true],
+      ['Ad-supported', true],
       [`Up to ${AI_PRO_DAILY_LIMIT} AI generations / day`, false],
-      ['Unlimited premium tool access', false],
+      ['Unlimited premium access', false],
       ['Zero ads', false],
     ],
   },
@@ -30,7 +30,7 @@ const PLANS = [
     name: 'Pro',
     price: '$6',
     period: '/month',
-    blurb: 'For power users and daily developers.',
+    blurb: 'For daily developers who want it all.',
     cta: 'Get Pro',
     to: SITE.stripeLinks.pro,
     highlight: true,
@@ -38,93 +38,173 @@ const PLANS = [
       [`All ${freeCount} free tools — unlimited`, true],
       [`${AI_PRO_DAILY_LIMIT} AI generations every day`, true],
       [`All ${premiumCount} premium tools — unlimited`, true],
-      ['Zero ads, forever', true],
-      ['Priority new-tool requests', true],
+      ['Zero ads', true],
       ['Cancel anytime', true],
     ],
   },
 ]
 
 export default function Premium() {
-  useMeta('Pro Plans — More AI & Premium Tools | OmniTools', `Upgrade to OmniTools Pro for unlimited premium tools, ${AI_PRO_DAILY_LIMIT} daily AI generations and zero ads.`)
+  useMeta('Pro Plans — OmniTools', `Upgrade for unlimited premium tools, ${AI_PRO_DAILY_LIMIT} daily AI generations and zero ads.`)
+
+  const premiumTools = TOOLS.filter((t) => t.premium)
+
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="text-center">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-600 dark:bg-amber-950 dark:text-amber-400">
-          <Rocket className="h-3.5 w-3.5" /> Support the project
+    <div style={{ maxWidth: '48rem', margin: '0 auto' }} className="page-enter">
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: 'var(--sp-12)' }}>
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', gap: 'var(--sp-1)',
+          padding: 'var(--sp-1) var(--sp-3)',
+          borderRadius: 'var(--radius-full)',
+          fontSize: 'var(--text-xs)', fontWeight: 600,
+          background: 'var(--color-surface-sunken)',
+          color: 'var(--color-text-secondary)',
+          border: '1px solid var(--color-border)',
+        }}>
+          <Crown size={12} /> Support the project
         </span>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight">Go Pro</h1>
-        <p className="mx-auto mt-3 max-w-xl text-zinc-500 dark:text-zinc-400">
-          All {freeCount} base tools stay free forever. Pro unlocks unlimited access to {premiumCount} premium tools, plenty of AI generations, and removes ads.
+        <h1 style={{
+          marginTop: 'var(--sp-4)',
+          fontFamily: 'var(--font-heading)',
+          fontSize: 'var(--text-4xl)',
+          fontWeight: 800,
+          letterSpacing: '-0.03em',
+        }}>Go Pro</h1>
+        <p style={{
+          marginTop: 'var(--sp-3)',
+          maxWidth: '30rem',
+          margin: 'var(--sp-3) auto 0',
+          fontSize: 'var(--text-sm)',
+          color: 'var(--color-text-secondary)',
+          lineHeight: 1.6,
+        }}>
+          All {freeCount} base tools stay free. Pro unlocks unlimited {premiumCount} premium tools, {AI_PRO_DAILY_LIMIT} AI generations/day, and zero ads.
         </p>
       </div>
 
-      {/* Premium tools preview */}
-      <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 p-6 dark:border-amber-800 dark:bg-amber-950/20">
-        <div className="flex items-center gap-2 mb-4">
-          <Crown className="h-5 w-5 text-amber-500" />
-          <h2 className="font-bold">Premium tools included with Pro</h2>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {TOOLS.filter((t) => t.premium).map((t) => (
-            <div key={t.id} className="flex items-center gap-3 rounded-lg bg-white p-3 dark:bg-zinc-800">
-              <t.icon className="h-5 w-5 text-amber-500 shrink-0" />
-              <div>
-                <span className="block text-sm font-semibold">{t.name}</span>
-                <span className="block text-xs text-zinc-500 dark:text-zinc-400">{t.blurb}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="mt-4 text-xs text-zinc-500">Free users get {PREMIUM_DAILY_LIMIT} use per day on each premium tool. Pro users get unlimited.</p>
-      </div>
-
-      <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2">
+      {/* Plans */}
+      <div style={{ display: 'grid', gap: 'var(--sp-6)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         {PLANS.map((p) => (
-          <div
-            key={p.name}
-            className={`card relative flex flex-col p-6 ${p.highlight ? 'border-amber-500 ring-2 ring-amber-500/20' : ''}`}
-          >
+          <div key={p.name} style={{
+            position: 'relative',
+            display: 'flex', flexDirection: 'column',
+            padding: 'var(--sp-8)',
+            borderRadius: 'var(--radius-xl)',
+            background: 'var(--color-surface)',
+            border: p.highlight ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
+            boxShadow: p.highlight ? 'var(--shadow-lg)' : 'none',
+          }}>
             {p.highlight && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
-                Most popular
-              </span>
+              <span style={{
+                position: 'absolute', top: '-0.75rem', left: '50%', transform: 'translateX(-50%)',
+                padding: 'var(--sp-1) var(--sp-3)',
+                borderRadius: 'var(--radius-full)',
+                fontSize: 'var(--text-xs)', fontWeight: 700,
+                background: 'var(--color-primary)',
+                color: 'white',
+              }}>Most popular</span>
             )}
-            <h2 className="text-lg font-bold">{p.name}</h2>
-            <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-4xl font-extrabold">{p.price}</span>
-              <span className="text-sm text-zinc-500">{p.period}</span>
+            <h2 style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'var(--text-lg)', fontWeight: 700,
+            }}>{p.name}</h2>
+            <div style={{ marginTop: 'var(--sp-3)', display: 'flex', alignItems: 'baseline', gap: 'var(--sp-1)' }}>
+              <span style={{ fontSize: 'var(--text-4xl)', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>{p.price}</span>
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)' }}>{p.period}</span>
             </div>
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{p.blurb}</p>
-            <ul className="mt-5 flex-1 space-y-2.5 text-sm">
+            <p style={{ marginTop: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>{p.blurb}</p>
+
+            <ul style={{ marginTop: 'var(--sp-6)', flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--sp-3)', listStyle: 'none' }}>
               {p.features.map(([label, has]) => (
-                <li key={label as string} className={`flex items-center gap-2 ${has ? '' : 'text-zinc-400 dark:text-zinc-600'}`}>
-                  {has ? <Check className="h-4 w-4 shrink-0 text-emerald-500" /> : <X className="h-4 w-4 shrink-0" />}
+                <li key={label as string} style={{
+                  display: 'flex', alignItems: 'center', gap: 'var(--sp-2)',
+                  fontSize: 'var(--text-sm)',
+                  color: has ? 'var(--color-text)' : 'var(--color-text-tertiary)',
+                }}>
+                  {has ? <Check size={16} style={{ color: 'var(--color-success)', flexShrink: 0 }} /> : <X size={16} style={{ flexShrink: 0, opacity: 0.4 }} />}
                   {label}
                 </li>
               ))}
             </ul>
+
             {p.to ? (
-              <a href={p.to as string} target="_blank" rel="noreferrer" className={`mt-6 ${p.highlight ? 'btn-primary bg-amber-600 hover:bg-amber-500' : 'btn-secondary'}`}>
-                {p.cta}
+              <a href={p.to as string} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', marginTop: 'var(--sp-6)' }}>
+                <button className={p.highlight ? 'btn-primary' : 'btn-secondary'} style={{ width: '100%' }}>
+                  {p.cta}
+                </button>
               </a>
             ) : p.highlight ? (
-              <button disabled className="btn-primary mt-6 bg-amber-600">Checkout coming soon</button>
+              <button disabled className="btn-primary" style={{ width: '100%', marginTop: 'var(--sp-6)', opacity: 0.5 }}>
+                Checkout coming soon
+              </button>
             ) : (
-              <Link to="/" className="btn-secondary mt-6">{p.cta}</Link>
+              <Link to="/" style={{ textDecoration: 'none', marginTop: 'var(--sp-6)' }}>
+                <button className="btn-secondary" style={{ width: '100%' }}>{p.cta}</button>
+              </Link>
             )}
           </div>
         ))}
       </div>
 
-      {!SITE.stripeLinks.pro && (
-        <p className="mt-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-center text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300">
-          Checkout activates automatically once a Stripe payment link is added in <code>src/lib/config.ts</code>.
+      {/* Premium tools preview */}
+      <div style={{
+        marginTop: 'var(--sp-12)',
+        padding: 'var(--sp-6)',
+        borderRadius: 'var(--radius-xl)',
+        border: '1px solid var(--color-border)',
+        background: 'var(--color-surface-raised)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)', marginBottom: 'var(--sp-4)' }}>
+          <Crown size={18} style={{ color: 'var(--color-warning)' }} />
+          <h2 style={{ fontSize: 'var(--text-base)', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>Premium tools included</h2>
+        </div>
+        <div style={{ display: 'grid', gap: 'var(--sp-3)', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+          {premiumTools.map((t) => (
+            <Link key={t.id} to={`/t/${t.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 'var(--sp-3)',
+                padding: 'var(--sp-3)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border-subtle)',
+                background: 'var(--color-surface)',
+                transition: 'border-color var(--duration-fast) var(--ease)',
+              }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--color-primary)')}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-subtle)')}
+              >
+                <t.icon size={18} style={{ color: 'var(--color-warning)', flexShrink: 0 }} />
+                <div>
+                  <span style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 600 }}>{t.name}</span>
+                  <span style={{ display: 'block', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>{t.blurb}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <p style={{ marginTop: 'var(--sp-4)', fontSize: 'var(--text-xs)', color: 'var(--color-text-tertiary)' }}>
+          Free users get {PREMIUM_DAILY_LIMIT} use/day per tool. Pro = unlimited.
         </p>
+      </div>
+
+      {!SITE.stripeLinks.pro && (
+        <div style={{
+          marginTop: 'var(--sp-6)',
+          padding: 'var(--sp-3) var(--sp-4)',
+          borderRadius: 'var(--radius-md)',
+          border: '1px solid var(--color-warning)',
+          background: 'var(--color-surface-sunken)',
+          textAlign: 'center',
+          fontSize: 'var(--text-sm)',
+          color: 'var(--color-text-secondary)',
+        }}>
+          Checkout activates once a Stripe payment link is added in <code style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>src/lib/config.ts</code>.
+        </div>
       )}
 
-      <p className="mt-8 text-center text-sm text-zinc-500">
-        Questions? <a href={`mailto:${SITE.contactEmail}`} className="text-indigo-500 underline">Email us</a>. Cancel anytime.
+      <p style={{ marginTop: 'var(--sp-8)', textAlign: 'center', fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)' }}>
+        Questions? <a href={`mailto:${SITE.contactEmail}`} style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>Email us</a>. Cancel anytime.
       </p>
     </div>
   )

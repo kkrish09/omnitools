@@ -68,9 +68,9 @@ export default function Home() {
             </Button>
           </a>
           <Link to="/premium" style={{ textDecoration: 'none' }}>
-            <Button data-variant="secondary" style={{ borderColor: 'rgba(255,255,255,.2)', color: 'rgba(255,255,255,.8)' }}>
+            <button className="btn-secondary" style={{ borderColor: 'rgba(255,255,255,.2)', color: 'rgba(255,255,255,.8)', background: 'transparent' }}>
               See Pro plans
-            </Button>
+            </button>
           </Link>
         </div>
         <div style={{
