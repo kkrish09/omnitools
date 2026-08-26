@@ -1,106 +1,131 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowRight, Crown, Shield, Sparkles, Zap } from 'lucide-react'
-import { GridList, GridListItem, Button, Link as AriaLink, TagGroup, Tag, TooltipTrigger, Tooltip } from 'react-aria-components'
-import { CATEGORIES, TOOLS, searchTools, toolsByCategory, isPremiumTool } from '../lib/tools'
+import { GridList, GridListItem, Button, Link as AriaLink } from 'react-aria-components'
+import { CATEGORIES, TOOLS, searchTools, toolsByCategory } from '../lib/tools'
+import { SITE } from '../lib/config'
 import { useMeta } from '../lib/utils'
-import { FaqItem, ToastRegionWrapper, Divider, BreadcrumbNav, SearchInput } from '../components/rac'
+import { FaqItem } from '../components/rac'
 import AdSlot from '../components/AdSlot'
 
 const FAQS = [
-  { q: 'Is OmniTools really free?', a: 'Yes — every tool is 100% free with no sign-up. Most tools are completely unlimited. Premium tools give free users 1 use per day; Pro ($6/month) unlocks unlimited access. The project is also open source under MIT.' },
-  { q: 'Are my files uploaded to a server?', a: 'No. Every tool runs entirely inside your browser using Canvas, Web Crypto, and other Web APIs. Your code, data and files never leave your device.' },
-  { q: 'What are premium tools?', a: 'Premium tools are advanced features like ER diagram builders, GraphQL schema editors, and CSS animation creators — the kind of tools developers normally pay $5-25/month for elsewhere. Free users get 1 use per day; Pro users get unlimited.' },
-  { q: 'Can I self-host or contribute?', a: 'Yes — the entire project is MIT-licensed on GitHub. Clone it, run npm install && npm run dev, and start hacking. PRs welcome!' },
-  { q: 'Can I use OmniTools on my phone?', a: 'Absolutely. The whole site is responsive and installable as an app (PWA) from your browser menu.' },
+  { q: 'Is this actually free?', a: 'Yes. All browser tools are free, no sign-up. Premium tools give free users 1 use/day; Pro ($6/mo) unlocks everything.' },
+  { q: 'Do my files get uploaded?', a: 'No. Everything runs in your browser. We literally cannot see your files.' },
+  { q: 'What are premium tools?', a: 'ER diagram builders, GraphQL schema editors, CSS animation tools — stuff devs usually pay $5-25/mo for elsewhere.' },
+  { q: 'Can I self-host?', a: 'Yep. MIT licensed on GitHub. Clone, npm install, npm run dev.' },
 ]
 
 export default function Home() {
   const [params] = useSearchParams()
   const q = params.get('q') ?? ''
   const results = q ? searchTools(q) : null
+  const premiumCount = TOOLS.filter((t) => t.premium).length
+
   useMeta(
-    q ? `Search: ${q} — OmniTools` : `OmniTools — ${TOOLS.length} Free Developer Tools`,
-    'Everything a developer needs: JSON formatter, YAML/CSV converter, regex tester, ER diagrams, GraphQL builder and more. All client-side, zero uploads.',
+    q ? `Search: ${q} — ${SITE.name}` : `${SITE.name} — ${TOOLS.length} Developer Tools`,
+    SITE.description,
   )
 
-  const freeTools = TOOLS.filter((t) => !t.premium)
-  const premiumTools = TOOLS.filter((t) => t.premium)
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-16)' }}>
-      {/* Hero */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-16)' }} className="page-enter">
+
+      {/* ===== HERO — dark, minimal, specific ===== */}
       <section style={{
-        position: 'relative', overflow: 'hidden',
+        position: 'relative',
         borderRadius: 'var(--radius-xl)',
-        border: '1px solid var(--border)',
-        background: 'linear-gradient(135deg, var(--accent-6), #7c3aed, #a855f7)',
-        padding: 'var(--sp-16) var(--sp-6)',
-        textAlign: 'center', color: 'white',
+        background: 'var(--color-bg-dark)',
+        padding: 'var(--sp-20) var(--sp-6)',
+        textAlign: 'center',
+        color: 'white',
+        overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', left: '-5rem', top: '-5rem', width: '16rem', height: '16rem', borderRadius: '50%', background: 'rgba(255,255,255,.08)', filter: 'blur(60px)' }} />
-          <div style={{ position: 'absolute', right: '-4rem', bottom: '-6rem', width: '18rem', height: '18rem', borderRadius: '50%', background: 'rgba(236,72,153,.15)', filter: 'blur(60px)' }} />
-        </div>
-        <h1 style={{ maxWidth: '40rem', margin: '0 auto', fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-          Everything a dev needs.<br />
-          <span style={{ background: 'linear-gradient(to right, #fcd34d, #f9a8d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            {TOOLS.length} free tools.
+        <h1 style={{
+          maxWidth: '42rem',
+          margin: '0 auto',
+          fontFamily: 'var(--font-heading)',
+          fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
+          fontWeight: 800,
+          letterSpacing: '-0.03em',
+          lineHeight: 1.1,
+        }}>
+          JSON broken? Regex confusing?<br />
+          <span style={{ color: 'var(--accent-4)' }}>
+            41 tools that actually work.
           </span>
         </h1>
-        <p style={{ maxWidth: '36rem', margin: 'var(--sp-4) auto 0', color: 'rgba(255,255,255,.8)', fontSize: 'var(--text-base)', lineHeight: 1.7 }}>
-          Format JSON, build ER diagrams, design APIs, generate UUIDs, test regex, create CSS animations and more —
-          fast, private and mostly free. Nothing leaves your browser.
+        <p style={{
+          maxWidth: '32rem',
+          margin: 'var(--sp-4) auto 0',
+          color: 'rgba(255,255,255,.6)',
+          fontSize: 'var(--text-base)',
+          lineHeight: 1.6,
+        }}>
+          No signup. No file uploads. Everything runs in your browser.
         </p>
-        <div style={{ position: 'relative', maxWidth: '28rem', margin: 'var(--sp-8) auto 0' }}>
-          <SearchInput
-            placeholder="Search for a tool… e.g. regex, yaml, erd"
-            value={q}
-            onChange={(v: string) => {
-              const url = new URL(window.location.href)
-              if (v) url.searchParams.set('q', v)
-              else url.searchParams.delete('q')
-              window.history.replaceState(null, '', url)
-            }}
-            onSubmit={(v: string) => window.location.href = `/?q=${encodeURIComponent(v)}`}
-            aria-label="Search tools"
-          />
+        <div style={{ marginTop: 'var(--sp-8)', display: 'flex', justifyContent: 'center', gap: 'var(--sp-3)', flexWrap: 'wrap' }}>
+          <a href="#categories">
+            <Button data-variant="primary" style={{ background: 'white', color: 'var(--color-bg-dark)', borderColor: 'white', fontWeight: 600 }}>
+              Browse tools
+            </Button>
+          </a>
+          <Link to="/premium" style={{ textDecoration: 'none' }}>
+            <Button data-variant="secondary" style={{ borderColor: 'rgba(255,255,255,.2)', color: 'rgba(255,255,255,.8)' }}>
+              See Pro plans
+            </Button>
+          </Link>
         </div>
         <div style={{
-          marginTop: 'var(--sp-6)',
+          marginTop: 'var(--sp-10)',
           display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center',
           gap: 'var(--sp-6)',
-          fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,.8)',
+          fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,.4)',
         }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Zap size={16} style={{ color: '#fcd34d' }} /> {TOOLS.length} tools</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Crown size={16} style={{ color: '#fcd34d' }} /> {premiumTools.length} premium</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Shield size={16} style={{ color: '#6ee7b7' }} /> Nothing leaves your browser</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Sparkles size={16} style={{ color: '#f9a8d4' }} /> Open source (MIT)</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Zap size={13} /> {TOOLS.length} tools</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Crown size={13} /> {premiumCount} premium</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Shield size={13} /> Files stay on your device</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}><Sparkles size={13} /> Open source (MIT)</span>
         </div>
       </section>
 
       <AdSlot slot="1111111111" className="min-h-[90px]" />
 
+      {/* ===== SEARCH RESULTS (when query present) ===== */}
       {results ? (
         <section>
           <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--sp-6)' }}>
             {results.length} result{results.length === 1 ? '' : 's'} for "{q}"
           </h2>
           {results.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)' }}>
-              Nothing found. Try "json", "regex", "jwt", "erd", or{' '}
-              <Link to="/" style={{ color: 'var(--accent-5)', textDecoration: 'underline' }}>browse all tools</Link>.
-            </p>
+            <div style={{ padding: 'var(--sp-8)', textAlign: 'center' }}>
+              <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--sp-4)' }}>
+                No tools match that. Try one of these:
+              </p>
+              <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {['json', 'regex', 'uuid', 'qr', 'color', 'jwt', 'base64', 'yaml'].map((s) => (
+                  <Link key={s} to={`/?q=${s}`} style={{ textDecoration: 'none' }}>
+                    <span style={{
+                      padding: 'var(--sp-1) var(--sp-3)',
+                      borderRadius: 'var(--radius-full)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 500,
+                      background: 'var(--color-surface-sunken)',
+                      color: 'var(--color-text-secondary)',
+                      border: '1px solid var(--color-border)',
+                    }}>{s}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           ) : (
             <GridList aria-label="Search results" style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
               {results.map((t) => (
                 <GridListItem key={t.id} id={t.id}>
-                  <Link to={`/t/${t.id}`} className="card" style={{ display: 'block', textDecoration: 'none', color: 'inherit', transition: 'all 200ms ease', transform: 'translateY(0)' }}>
+                  <Link to={`/t/${t.id}`} className="card" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)' }}>
-                      <t.icon size={28} style={{ color: 'var(--accent-5)' }} />
-                      {t.premium && <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 8px', borderRadius: 'var(--radius-full)', fontSize: '10px', fontWeight: 700 }}>PRO</span>}
+                      <t.icon size={20} style={{ color: 'var(--color-primary)' }} />
+                      {t.premium && <span style={{ background: 'var(--color-warning)', color: '#000', padding: '1px 6px', borderRadius: 'var(--radius-full)', fontSize: '9px', fontWeight: 700 }}>PRO</span>}
                     </div>
-                    <h3 style={{ marginTop: 'var(--sp-3)', fontWeight: 600, fontSize: 'var(--text-sm)' }}>{t.name}</h3>
-                    <p style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>{t.blurb}</p>
+                    <h3 style={{ marginTop: 'var(--sp-3)', fontWeight: 600, fontSize: 'var(--text-sm)', fontFamily: 'var(--font-heading)' }}>{t.name}</h3>
+                    <p style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>{t.blurb}</p>
                   </Link>
                 </GridListItem>
               ))}
@@ -109,87 +134,62 @@ export default function Home() {
         </section>
       ) : (
         <>
-          {/* Categories */}
-          <section>
-            <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--sp-6)' }}>Browse by category</h2>
-            <GridList aria-label="Categories" style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-              {CATEGORIES.map((c) => (
-                <GridListItem key={c.id} id={c.id}>
-                  <Link to={`/c/${c.id}`} className="card" style={{
-                    display: 'block', textDecoration: 'none', color: 'inherit',
-                    position: 'relative', overflow: 'hidden',
-                  }}>
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      width: '2.75rem', height: '2.75rem', borderRadius: 'var(--radius-lg)',
-                      background: `linear-gradient(135deg, ${c.gradient.replace(',', ', ')})`,
-                      color: 'white', marginBottom: 'var(--sp-3)',
-                    }}>
-                      <c.icon size={20} />
-                    </span>
-                    <h3 style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>{c.label}</h3>
-                    <p style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
-                      {toolsByCategory(c.id).length} tools · {c.tagline}
-                    </p>
-                    <ArrowRight size={16} style={{ position: 'absolute', right: 'var(--sp-4)', top: 'var(--sp-5)', color: 'var(--text-tertiary)' }} />
-                  </Link>
-                </GridListItem>
-              ))}
-            </GridList>
-          </section>
-
-          {/* Premium tools */}
-          <section>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)', marginBottom: 'var(--sp-6)' }}>
-              <Crown size={24} style={{ color: '#f59e0b' }} />
-              <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Premium Tools</h2>
-              <span style={{ background: '#fef3c7', color: '#92400e', padding: '2px 10px', borderRadius: 'var(--radius-full)', fontSize: 'var(--text-xs)', fontWeight: 600 }}>1 free use/day</span>
-            </div>
-            <p style={{ marginBottom: 'var(--sp-4)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              Advanced tools developers normally pay $5-25/month for elsewhere. Free users get 1 use per day; Pro gets unlimited.
+          {/* ===== CATEGORIES — primary navigation ===== */}
+          <section id="categories">
+            <h2 style={{ fontSize: 'var(--text-3xl)', fontWeight: 700, marginBottom: 'var(--sp-2)' }}>Browse by category</h2>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--sp-8)' }}>
+              Pick a category to see its tools.
             </p>
-            <GridList aria-label="Premium tools" style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
-              {premiumTools.map((t) => (
-                <GridListItem key={t.id} id={t.id}>
-                  <Link to={`/t/${t.id}`} className="card" style={{
-                    display: 'block', textDecoration: 'none', color: 'inherit',
-                    borderColor: '#fbbf24', background: 'linear-gradient(to bottom right, #fffbeb, #fff7ed)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)' }}>
-                      <t.icon size={24} style={{ color: '#d97706' }} />
-                      <Crown size={14} style={{ color: '#fbbf24' }} />
-                    </div>
-                    <h3 style={{ marginTop: 'var(--sp-3)', fontWeight: 600, fontSize: 'var(--text-sm)' }}>{t.name}</h3>
-                    <p style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>{t.blurb}</p>
-                  </Link>
-                </GridListItem>
-              ))}
-            </GridList>
-          </section>
-
-          {/* All tools */}
-          <section>
-            <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--sp-6)' }}>All {TOOLS.length} tools</h2>
-            <GridList aria-label="All tools" style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
-              {searchTools('').map((t) => {
-                const cat = CATEGORIES.find((c) => c.id === t.category)!
+            <GridList aria-label="Categories" style={{ display: 'grid', gap: 'var(--sp-4)', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+              {CATEGORIES.map((c) => {
+                const count = toolsByCategory(c.id).length
                 return (
-                  <GridListItem key={t.id} id={t.id}>
-                    <Link to={`/t/${t.id}`} className="card" style={{ display: 'flex', gap: 'var(--sp-4)', textDecoration: 'none', color: 'inherit' }}>
-                      <span style={{
-                        flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        width: '2.5rem', height: '2.5rem', borderRadius: 'var(--radius-md)',
-                        background: `linear-gradient(135deg, ${cat.gradient.replace(',', ', ')})`, color: 'white',
+                  <GridListItem key={c.id} id={c.id}>
+                    <Link to={`/c/${c.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <div className="card" style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--sp-3)',
+                        minHeight: '140px',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}>
-                        <t.icon size={18} />
-                      </span>
-                      <span style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)' }}>
-                          <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>{t.name}</span>
-                          {t.premium && <span style={{ background: '#fef3c7', color: '#92400e', padding: '1px 6px', borderRadius: 'var(--radius-full)', fontSize: '9px', fontWeight: 700 }}>PRO</span>}
+                        {/* Colored accent strip */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '3px',
+                          background: c.gradient,
+                        }} />
+                        {/* Icon */}
+                        <span style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '2.5rem',
+                          height: '2.5rem',
+                          borderRadius: 'var(--radius-md)',
+                          background: `${c.gradient}18`,
+                          color: c.gradient,
+                        }}>
+                          <c.icon size={20} className="category-icon" />
                         </span>
-                        <span style={{ display: 'block', marginTop: '2px', fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>{t.blurb}</span>
-                      </span>
+                        {/* Text */}
+                        <div>
+                          <h3 style={{
+                            fontWeight: 700,
+                            fontSize: 'var(--text-base)',
+                            fontFamily: 'var(--font-heading)',
+                            marginBottom: 'var(--sp-1)',
+                          }}>{c.label}</h3>
+                          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                            {count} tool{count !== 1 ? 's' : ''} — {c.tagline}
+                          </p>
+                        </div>
+                        <ArrowRight size={14} style={{ position: 'absolute', right: 'var(--sp-4)', top: 'var(--sp-5)', color: 'var(--color-text-tertiary)' }} />
+                      </div>
                     </Link>
                   </GridListItem>
                 )
@@ -197,9 +197,36 @@ export default function Home() {
             </GridList>
           </section>
 
-          {/* FAQ */}
-          <section style={{ maxWidth: '48rem', margin: '0 auto' }}>
-            <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--sp-6)', textAlign: 'center' }}>Frequently asked questions</h2>
+          {/* ===== PREMIUM — small inline mention, not a section ===== */}
+          <section style={{
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-warning)',
+            padding: 'var(--sp-6) var(--sp-8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 'var(--sp-4)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+              <Crown size={20} style={{ color: 'var(--color-warning)', flexShrink: 0 }} />
+              <div>
+                <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>Need more?</span>
+                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginLeft: 'var(--sp-2)' }}>
+                  Pro gives unlimited access to {premiumCount} advanced tools and 100 AI generations/day.
+                </span>
+              </div>
+            </div>
+            <Link to="/premium" style={{ textDecoration: 'none', flexShrink: 0 }}>
+              <Button data-variant="primary" style={{ fontSize: 'var(--text-xs)', padding: 'var(--sp-1) var(--sp-4)' }}>
+                See plans →
+              </Button>
+            </Link>
+          </section>
+
+          {/* ===== FAQ — compact, bottom ===== */}
+          <section style={{ maxWidth: '40rem', margin: '0 auto' }}>
+            <h2 style={{ fontSize: 'var(--text-xl)', fontWeight: 700, marginBottom: 'var(--sp-6)', textAlign: 'center' }}>FAQ</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)' }}>
               {FAQS.map((f) => <FaqItem key={f.q} question={f.q} answer={f.a} />)}
             </div>
@@ -220,23 +247,6 @@ export default function Home() {
               }),
             }}
           />
-
-          {/* Premium CTA */}
-          <section style={{
-            borderRadius: 'var(--radius-xl)',
-            border: '1px solid #fbbf24',
-            background: 'linear-gradient(to bottom right, #fffbeb, #fff7ed)',
-            padding: 'var(--sp-10)', textAlign: 'center',
-          }}>
-            <Crown size={32} style={{ color: '#f59e0b', margin: '0 auto var(--sp-3)' }} />
-            <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700 }}>Need more than 1 use/day?</h2>
-            <p style={{ maxWidth: '28rem', margin: 'var(--sp-2) auto 0', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              Pro gives you <strong>unlimited access</strong> to all {premiumTools.length} premium tools, {100} AI generations per day, and zero ads — from $6/month.
-            </p>
-            <Link to="/premium" style={{ textDecoration: 'none', marginTop: 'var(--sp-5)', display: 'inline-block' }}>
-              <Button data-variant="primary" style={{ background: '#d97706', borderColor: '#d97706' }}>See plans</Button>
-            </Link>
-          </section>
         </>
       )}
     </div>

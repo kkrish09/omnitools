@@ -18,7 +18,7 @@ function AuthRequiredGate() {
     <div className="card" style={{ maxWidth: '32rem', margin: '0 auto', padding: 'var(--sp-8)', textAlign: 'center' }}>
       <div style={{
         width: '4rem', height: '4rem', borderRadius: 'var(--radius-xl)',
-        background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)', color: 'white',
+        background: 'var(--color-primary)', color: 'white',
         display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
       }}>
         <LogIn size={32} />
@@ -42,7 +42,7 @@ function PremiumGate({ onUse, usesLeft }: { onUse: () => void; usesLeft: number 
       <div className="card" style={{ maxWidth: '32rem', margin: '0 auto', padding: 'var(--sp-8)', textAlign: 'center' }}>
         <div style={{
           width: '4rem', height: '4rem', borderRadius: 'var(--radius-xl)',
-          background: 'linear-gradient(135deg, #f59e0b, #ea580c)', color: 'white',
+          background: 'var(--color-warning)', color: '#000',
           display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
         }}>
           <Lock size={32} />
@@ -136,7 +136,7 @@ export default function ToolPage() {
         <span style={{
           flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: '3.5rem', height: '3.5rem', borderRadius: 'var(--radius-xl)',
-          background: `linear-gradient(135deg, ${category.gradient.replace(',', ', ')})`, color: 'white',
+          background: `${category.gradient}18`, color: category.gradient,
         }}>
           <tool.icon size={28} />
         </span>

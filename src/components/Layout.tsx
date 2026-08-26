@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Crown, Heart, LogOut, Menu, Moon, Sun, User, Wrench, X } from 'lucide-react'
+import { Crown, LogOut, Menu, Moon, Sun, User, Wrench, X } from 'lucide-react'
 import { Toolbar, TooltipTrigger, Tooltip, Button } from 'react-aria-components'
 import { CATEGORIES, TOOLS } from '../lib/tools'
 import { SITE } from '../lib/config'
@@ -9,12 +9,10 @@ import { SearchInput, ToastRegionWrapper } from './rac'
 
 const NAV = [
   { to: '/c/code', label: 'Code' },
-  { to: '/c/encode', label: 'Encode' },
   { to: '/c/generate', label: 'Generate' },
   { to: '/c/devref', label: 'Reference' },
   { to: '/c/design', label: 'Design' },
-  { to: '/c/premium', label: 'Premium', icon: Crown },
-  { to: '/c/text', label: 'Text' },
+  { to: '/premium', label: 'Pro' },
 ]
 
 export default function Layout() {
@@ -64,7 +62,7 @@ export default function Layout() {
         backdropFilter: 'blur(12px)',
       }}>
         <div style={{
-          maxWidth: '72rem', margin: '0 auto', height: '4rem',
+          maxWidth: '72rem', margin: '0 auto', height: '3.5rem',
           display: 'flex', alignItems: 'center', gap: 'var(--sp-4)',
           padding: '0 var(--sp-4)',
         }}>
@@ -73,7 +71,7 @@ export default function Layout() {
             <span style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               width: '2rem', height: '2rem', borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)',
+              background: 'var(--color-primary)',
               color: 'white',
             }}>
               <Wrench size={18} />
@@ -219,56 +217,34 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer */}
+      {/* Footer — compact, editorial */}
       <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg)' }}>
         <div style={{
           maxWidth: '72rem', margin: '0 auto',
-          display: 'grid', gap: 'var(--sp-8)', padding: 'var(--sp-12) var(--sp-4)',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: 'var(--sp-4)',
+          padding: 'var(--sp-6) var(--sp-4)',
         }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)', fontWeight: 700, marginBottom: 'var(--sp-3)' }}>
-              <span style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '1.75rem', height: '1.75rem', borderRadius: 'var(--radius-md)',
-                background: 'linear-gradient(135deg, var(--accent-5), #7c3aed)', color: 'white',
-              }}>
-                <Wrench size={14} />
-              </span>
-              OmniTools
-            </div>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>{SITE.tagline} Fast, private, no sign-up for free tools.</p>
-            <p style={{ marginTop: 'var(--sp-3)', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', gap: 'var(--sp-1)' }}>
-              Made with <Heart size={12} style={{ fill: 'var(--danger)', color: 'var(--danger)' }} /> — runs entirely in your browser.
-            </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+            <span style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '1.5rem', height: '1.5rem', borderRadius: 'var(--radius-sm)',
+              background: 'var(--color-primary)', color: 'white',
+            }}>
+              <Wrench size={12} />
+            </span>
+            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600 }}>{SITE.name}</span>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-tertiary)' }}>·</span>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>{SITE.tagline}</span>
           </div>
-          <div>
-            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Categories</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              {CATEGORIES.slice(0, 5).map((c) => (
-                <li key={c.id}><Link to={`/c/${c.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{c.label}</Link></li>
-              ))}
-            </ul>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-4)', fontSize: 'var(--text-xs)', color: 'var(--color-text-tertiary)' }}>
+            <Link to="/about" style={{ textDecoration: 'none', color: 'inherit' }}>About</Link>
+            <Link to="/guides" style={{ textDecoration: 'none', color: 'inherit' }}>Guides</Link>
+            <Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>Privacy</Link>
+            <Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>Terms</Link>
+            <a href={`mailto:${SITE.contactEmail}`} style={{ textDecoration: 'none', color: 'inherit' }}>Contact</a>
+            <span>© {new Date().getFullYear()}</span>
           </div>
-          <div>
-            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Company</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              <li><Link to="/premium" style={{ textDecoration: 'none', color: 'inherit' }}>Premium</Link></li>
-              <li><Link to="/guides" style={{ textDecoration: 'none', color: 'inherit' }}>Guides</Link></li>
-              <li><Link to="/about" style={{ textDecoration: 'none', color: 'inherit' }}>About</Link></li>
-              <li><a href={`mailto:${SITE.contactEmail}`} style={{ textDecoration: 'none', color: 'inherit' }}>Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--sp-3)' }}>Legal</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-              <li><Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>Privacy Policy</Link></li>
-              <li><Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>Terms of Service</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div style={{ borderTop: '1px solid var(--border)', padding: 'var(--sp-4)', textAlign: 'center', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
-          © {new Date().getFullYear()} {SITE.name}. All rights reserved.
         </div>
       </footer>
 

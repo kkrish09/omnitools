@@ -60,13 +60,13 @@ export interface Category {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: 'code', label: 'Code Tools', tagline: 'Formatters, validators, and testers.', icon: Code, gradient: '#10b981,#14b8a6' },
-  { id: 'encode', label: 'Encode & Decode', tagline: 'Base64, URL, HTML encoding and more.', icon: Key, gradient: '#0ea5e9,#06b6d4' },
-  { id: 'generate', label: 'Generators', tagline: 'UUIDs, passwords, QR codes, configs.', icon: Terminal, gradient: '#8b5cf6,#a855f7' },
-  { id: 'devref', label: 'Dev Reference', tagline: 'Converters, tables, and quick lookups.', icon: Binary, gradient: '#3b82f6,#6366f1' },
-  { id: 'design', label: 'Design', tagline: 'Colors, palettes and gradients.', icon: PaletteIcon, gradient: '#d946ec,#ec4899' },
-  { id: 'premium', label: 'Premium Tools', tagline: 'Advanced tools — Pro users get unlimited.', icon: Crown, gradient: '#f59e0b,#f97316' },
-  { id: 'text', label: 'Text', tagline: 'Case conversion, diff and more.', icon: Type, gradient: '#f59e0b,#f97316' },
+  { id: 'code', label: 'Code Tools', tagline: 'Format, validate, and debug code.', icon: Code, gradient: '#10b981' },
+  { id: 'encode', label: 'Encode & Decode', tagline: 'Base64, URL, HTML encoding.', icon: Key, gradient: '#0ea5e9' },
+  { id: 'generate', label: 'Generators', tagline: 'UUIDs, passwords, QR codes, configs.', icon: Terminal, gradient: '#8b5cf6' },
+  { id: 'devref', label: 'Reference', tagline: 'Converters, tables, quick lookups.', icon: Binary, gradient: '#3b82f6' },
+  { id: 'design', label: 'Design', tagline: 'Colors, palettes, gradients.', icon: PaletteIcon, gradient: '#d946ec' },
+  { id: 'premium', label: 'Premium', tagline: 'Advanced tools. Pro = unlimited.', icon: Crown, gradient: '#f59e0b' },
+  { id: 'text', label: 'Text', tagline: 'Case conversion, diff.', icon: Type, gradient: '#ef4444' },
 ]
 
 export interface Tool {

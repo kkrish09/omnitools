@@ -11,7 +11,7 @@ body {
   @apply antialiased;
 }
 
-/* Ensure lucide-react SVG icons render properly */
+/* ===== SVG Icons ===== */
 svg.lucide {
   width: 1em;
   height: 1em;
@@ -20,128 +20,201 @@ svg.lucide {
   flex-shrink: 0;
   stroke-width: 2;
 }
-/* Override Tailwind preflight display:block on inline SVG icons */
 svg:not(.lucide):not([class*="react-aria"]) {
   display: inline-block;
 }
 
-/* Shared button styles used by legacy tool components */
+/* ===== Buttons — Three intentional variants ===== */
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  font-size: var(--text-sm);
   font-weight: 600;
+  font-family: var(--font-heading);
   border-radius: var(--radius-md);
-  background: var(--accent-6);
+  background: var(--color-primary);
   color: white;
   border: none;
   cursor: pointer;
-  transition: background 100ms ease, opacity 100ms ease;
+  transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+  min-height: 40px;
 }
 .btn-primary:hover {
-  background: var(--accent-7);
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:active {
+  transform: scale(0.98);
 }
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
+  font-family: var(--font-sans);
   border-radius: var(--radius-md);
-  background: var(--bg-sunken);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: background 100ms ease, border-color 100ms ease;
+  transition: background var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  min-height: 36px;
 }
 .btn-secondary:hover {
-  background: var(--gray-2);
+  background: var(--color-surface-sunken);
   border-color: var(--gray-4);
+}
+.btn-secondary:active {
+  transform: scale(0.98);
 }
 .btn-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-family: var(--font-sans);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: none;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+}
+.btn-ghost:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+/* ===== Inputs ===== */
 .input,
 .input-input {
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--bg-sunken);
-  color: var(--text);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
   outline: none;
-  transition: border-color 100ms ease, box-shadow 100ms ease;
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
 }
 .input:focus,
 .input-input:focus {
-  border-color: var(--accent-5);
-  box-shadow: 0 0 0 3px var(--accent-1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 textarea.input,
 textarea.input-input {
   resize: vertical;
   min-height: 8rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   line-height: 1.5;
 }
 
-/* Override some Tailwind utilities with our design tokens */
+/* ===== Cards ===== */
 .card {
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--sp-5);
-  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 .card:hover {
   border-color: var(--gray-4);
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 .dark .card:hover {
   border-color: var(--gray-7);
 }
+
+/* Card — no lift variant (for cards that shouldn't animate) */
+.card-static {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+}
+
 .label {
   display: block;
   font-size: var(--text-xs);
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: var(--sp-1);
 }
 
-/* Dark mode for btn-primary/btn-secondary */
+/* ===== Route transition ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: fadeIn 0.2s var(--ease) forwards;
+}
+
+/* ===== Skeleton loader ===== */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+.skeleton {
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== Dark mode overrides ===== */
 .dark .btn-primary {
   background: var(--accent-5);
 }
 .dark .btn-primary:hover {
-  background: var(--accent-6);
+  background: var(--accent-4);
 }
 .dark .btn-secondary {
-  background: var(--gray-2);
   border-color: var(--gray-6);
-  color: var(--text);
+  color: var(--color-text);
 }
 .dark .btn-secondary:hover {
-  background: var(--gray-3);
+  background: var(--gray-8);
   border-color: var(--gray-7);
+}
+.dark .btn-ghost:hover {
+  background: var(--gray-8);
+  color: var(--color-text);
 }
 .dark .input,
 .dark .input-input {
-  background: var(--gray-2);
+  background: var(--gray-10);
   border-color: var(--gray-6);
-  color: var(--text);
+  color: var(--color-text);
 }
 .dark .input:focus,
 .dark .input-input:focus {
