@@ -70,10 +70,16 @@ export async function verifyPassword(password, stored) {
 // --- JWT using Web Crypto HMAC ---
 
 const ALG = { name: 'HMAC', hash: 'SHA-256' }
-const SECRET = new TextEncoder().encode('omnitools-jwt-secret-2024-prod')
 
-async function getKey() {
-  return crypto.subtle.importKey('raw', SECRET, ALG, false, ['sign', 'verify'])
+// DEV-ONLY fallback so local development (where there is no Pages env) keeps
+// signing/verifying sessions. This value is NOT secret and MUST NOT be used in
+// production: the deployed environment must set JWT_SECRET (see report). Do not
+// put a real production secret here.
+const DEV_JWT_SECRET = 'omnitools-dev-secret-change-me'
+
+async function getKey(env) {
+  const secret = (env && env.JWT_SECRET) || DEV_JWT_SECRET
+  return crypto.subtle.importKey('raw', new TextEncoder().encode(secret), ALG, false, ['sign', 'verify'])
 }
 
 function base64url(input) {
@@ -98,20 +104,20 @@ function base64urlDecode(s) {
   return Uint8Array.from(bin, (c) => c.charCodeAt(0))
 }
 
-export async function createToken(userId, email) {
+export async function createToken(env, userId, email) {
   const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
   const now = Math.floor(Date.now() / 1000)
   const payload = base64url(JSON.stringify({ userId, email, iat: now, exp: now + 7 * 24 * 3600 }))
   const data = `${header}.${payload}`
-  const sig = await crypto.subtle.sign('HMAC', await getKey(), new TextEncoder().encode(data))
+  const sig = await crypto.subtle.sign('HMAC', await getKey(env), new TextEncoder().encode(data))
   return `${data}.${base64url(sig)}`
 }
 
-export async function verifyToken(token) {
+export async function verifyToken(env, token) {
   try {
     const [header, payload, sig] = token.split('.')
     if (!header || !payload || !sig) return null
-    const valid = await crypto.subtle.verify('HMAC', await getKey(), base64urlDecode(sig), new TextEncoder().encode(`${header}.${payload}`))
+    const valid = await crypto.subtle.verify('HMAC', await getKey(env), base64urlDecode(sig), new TextEncoder().encode(`${header}.${payload}`))
     if (!valid) return null
     const data = JSON.parse(new TextDecoder().decode(base64urlDecode(payload)))
     if (data.exp && data.exp < Math.floor(Date.now() / 1000)) return null
@@ -139,10 +145,10 @@ export function getSessionToken(request) {
   return match ? match[1] : null
 }
 
-export async function getUser(request) {
+export async function getUser(request, env) {
   const token = getSessionToken(request)
   if (!token) return null
-  return await verifyToken(token)
+  return await verifyToken(env, token)
 }
 
 export function json(obj, status = 200, extraHeaders = {}) {

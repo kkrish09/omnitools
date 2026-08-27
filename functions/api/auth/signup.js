@@ -25,7 +25,7 @@ export async function onRequestPost({ request, env }) {
 
     await sql`INSERT INTO users (id, email, name, password_hash) VALUES (${id}, ${email}, ${name || email.split('@')[0]}, ${passwordHash})`
 
-    const token = await createToken(id, email)
+    const token = await createToken(env, id, email)
     return json(
       { ok: true, user: { id, email, name: name || email.split('@')[0] } },
       200,
