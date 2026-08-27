@@ -3,7 +3,7 @@ import { getSql, getUser, json } from '../../db/helpers.js'
 const LIMITS = { premium: 1, ai: 1 }
 
 export async function onRequestGet({ request, env }) {
-  const user = await getUser(request)
+  const user = await getUser(request, env)
   if (!user) return json({ error: 'Auth required' }, 401)
 
   const url = new URL(request.url)

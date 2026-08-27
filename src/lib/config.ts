@@ -11,6 +11,11 @@ export const SITE = {
   // Google AdSense publisher ID, e.g. 'ca-pub-1234567890123456'.
   adsenseClient: 'ca-pub-2828002597119301',
   // Stripe payment links for the Premium plan (create free at stripe.com/payment-links).
+  // NOTE: Publishing a link here is NOT sufficient to sell Pro. There is currently no
+  // server-side entitlement path: the Pages Functions expose no Stripe webhook/checkout,
+  // and nothing ever sets a user's `plan` to 'pro' (signup inserts users without a plan).
+  // Until that backend exists, leave this empty so /premium renders the honest
+  // "checkout not live yet" state instead of a purchase that can never be fulfilled.
   stripeLinks: {
     pro: '',
   },

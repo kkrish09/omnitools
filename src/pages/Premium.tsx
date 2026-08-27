@@ -137,7 +137,7 @@ export default function Premium() {
               </a>
             ) : p.highlight ? (
               <button disabled className="btn-primary" style={{ width: '100%', marginTop: 'var(--sp-6)', opacity: 0.5 }}>
-                Checkout coming soon
+                Checkout not live yet
               </button>
             ) : (
               <Link to="/" style={{ textDecoration: 'none', marginTop: 'var(--sp-6)' }}>
@@ -189,7 +189,7 @@ export default function Premium() {
       </div>
 
       {!SITE.stripeLinks.pro && (
-        <div style={{
+        <div role="status" style={{
           marginTop: 'var(--sp-6)',
           padding: 'var(--sp-3) var(--sp-4)',
           borderRadius: 'var(--radius-md)',
@@ -199,7 +199,11 @@ export default function Premium() {
           fontSize: 'var(--text-sm)',
           color: 'var(--color-text-secondary)',
         }}>
-          Checkout activates once a Stripe payment link is added in <code style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>src/lib/config.ts</code>.
+          Pro checkout isn't live yet. When payments are enabled, Pro will remove the daily use limits and
+          unlock all {premiumCount} premium tools. Questions?{' '}
+          <a href={`mailto:${SITE.contactEmail}`} style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>
+            Email us
+          </a>.
         </div>
       )}
 

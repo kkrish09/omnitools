@@ -1,7 +1,7 @@
 import { getSql, getUser, json } from '../db/helpers.js'
 
 export async function onRequestPost({ request, env }) {
-  const user = await getUser(request)
+  const user = await getUser(request, env)
   if (!user) return json({ error: 'Authentication required. Please log in.' }, 401)
 
   let body
